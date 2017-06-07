@@ -111,8 +111,6 @@ namespace Itsomax.Module.Core.Extensions
                     o.Lockout.AllowedForNewUsers = Convert.ToBoolean(configuration.GetSection("ConfigSystem:AllowedForNewUsers").Value);
                     o.Lockout.MaxFailedAccessAttempts = Convert.ToInt32(configuration.GetSection("ConfigSystem:MaxFailedAccessAttempts").Value);
                     o.Lockout.DefaultLockoutTimeSpan = System.TimeSpan.FromDays(Convert.ToInt32(configuration.GetSection("ConfigSystem:DefaultLockoutTimeSpanDays").Value));
-                //o.Cookies.ApplicationCookie.ExpireTimeSpan = System.TimeSpan.FromMinutes(Convert.ToInt32(configuration.GetSection("ConfigSystem:CookieExpireTimeSpanMin").Value));
-                    //o.Cookies.ApplicationCookie.AccessDeniedPath = Convert.ToString(configuration.GetSection("ConfigSystem:AccessDeniedPath").Value);
 
             })
                 .AddRoleStore<ItsomaxRoleStore>()
@@ -122,6 +120,8 @@ namespace Itsomax.Module.Core.Extensions
                 {
                     o.LoginPath = Convert.ToString(configuration.GetSection("ConfigSystem:LoginPath").Value);
                     o.LogoutPath = Convert.ToString(configuration.GetSection("ConfigSystem:LogoutPath").Value);
+                    o.ExpireTimeSpan = System.TimeSpan.FromMinutes(Convert.ToInt32(configuration.GetSection("ConfigSystem:CookieExpireTimeSpanMin").Value));
+                    o.AccessDeniedPath = Convert.ToString(configuration.GetSection("ConfigSystem:AccessDeniedPath").Value);
                 });
 
             return services;

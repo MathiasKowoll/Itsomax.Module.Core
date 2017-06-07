@@ -30,19 +30,18 @@ namespace Itsomax.Module.Core.Extensions
             return app;
         }
 
-        public static IApplicationBuilder UseCustomizedMvc(this IApplicationBuilder app)
+        public static IApplicationBuilder UseCustomizedMvc(this IApplicationBuilder app, IConfiguration config)
         {
-            
-            //app.UseHangfireServer();
-            //app.UseHangfireDashboard();
 
-			app.UseMvc(routes =>
+            var route = config.GetSection("DefaultUrl:Url").Value;
+            app.UseMvc(routes =>
 			{
 				routes.Routes.Add(new UrlSlugRoute(routes.DefaultHandler));
 
 				routes.MapRoute(
 					"default",
-					"{controller=Web}/{action=Index}/{id?}");
+                    route);
+                    //"{controller=Admin}/{action=Index}/{id?}");
 			});
             return app;
         }
