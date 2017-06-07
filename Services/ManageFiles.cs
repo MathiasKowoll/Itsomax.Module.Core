@@ -43,5 +43,17 @@ namespace Itsomax.Module.Core.Services
                 file.Delete();
             }
         }
+        public string GetFileContent(string Path, string FileName)
+        {
+            var file = Path + "/" + FileName;
+            string content = null;
+            using (StreamReader reader = new StreamReader(File.OpenRead(file)))
+            {
+                content = reader.ReadToEnd();
+                reader.Dispose();
+            }
+            return content;
+
+        }
     }
 }

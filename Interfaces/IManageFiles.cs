@@ -6,5 +6,6 @@ namespace Itsomax.Module.Core.Interfaces
          void EditFile(string Path, string Content,string FileName);
          void CleanFile(string Path,string FileName);
          void EmptyDir(string dir);
+        string GetFileContent(string Path, string FileName);
     }
 }
