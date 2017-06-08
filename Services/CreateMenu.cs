@@ -30,7 +30,7 @@ namespace Itsomax.Module.Core.Services
 
             foreach (var itemMod in modules)
             {
-                var modContent = _moduleContent.Query().Where(x => x.ModulesId == itemMod.Id && !x.Action.ToUpper().Contains("LOG")).ToList();
+                var modContent = _moduleContent.Query().Where(x => x.ModulesId == itemMod.Id && !x.Action.ToUpper().Contains("VIEW")).ToList();
                 sidebarMenu = sidebarMenu + 
                 "<li class=\"treeview\">"+
                 "<a href =\"#\">"+
