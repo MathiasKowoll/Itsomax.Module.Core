@@ -163,19 +163,32 @@ namespace Itsomax.Module.Core.Extensions
                 }
                 //TODO: Temporal solucion until I sort this out
                 //Postgres
-                var sql = "TRUNCATE TABLE \"public\".\"Core_ModuleContent\"";
+                //var sql = "TRUNCATE TABLE \"public\".\"Core_ModuleContent\"";
                 //SQL Server
                 //var sql = "TRUNCATE TABLE Core_ModuleContent";
-                context.Database.ExecuteSqlCommand(sql);
+                //context.Database.ExecuteSqlCommand(sql);
                 //Postgres
-                sql = "ALTER SEQUENCE \"public\".\"Core_ModuleContent_Id_seq\" restart;";
+                //sql = "ALTER SEQUENCE \"public\".\"Core_ModuleContent_Id_seq\" restart;";
                 //SQL Server
                 //sql = "ALTER SEQUENCE \"public\".\"Core_ModuleContent_Id_seq\" restart;";
-                context.Database.ExecuteSqlCommand(sql);
+                //context.Database.ExecuteSqlCommand(sql);
+                var modulesDB = context.Modules.ToList();
+                //Delete unused Modules
+                foreach (var item in modulesDB)
+                {
+                    var existModuleGlobal = GlobalConfiguration.Modules.FirstOrDefault(x => x.Name == item.Name);
+                    if (existModuleGlobal==null)
+                    {
+                        var moduleDelete = context.Modules.FirstOrDefault(x => x.Id == item.Id);
+                        context.Modules.Remove(moduleDelete);
+                        context.SaveChanges();
+                    }
+                }
+
                 foreach (var moduleConfig in GlobalConfiguration.Modules)
                 {
                     var asm = moduleConfig.Assembly;
-                    var projectName = moduleConfig.Name;
+                    //var projectName = moduleConfig.Name;
                     var modelContent = asm.GetTypes().
                     SelectMany(t => t.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public))
                     .Where(d => d.ReturnType.Name.Contains("Result"))
@@ -186,6 +199,7 @@ namespace Itsomax.Module.Core.Extensions
                     });
 
                     var modules = context.Modules.FirstOrDefault(z => z.Name == moduleConfig.Name);
+
                     if (modules != null)
                     {
                         modules.Path = moduleConfig.Path;
@@ -193,9 +207,26 @@ namespace Itsomax.Module.Core.Extensions
                         context.Entry(modules).State = EntityState.Modified;
                         context.SaveChanges();
 
+                        var modContentDB = context.ModuleContent.Where(x => x.ModulesId == modules.Id);
+                        foreach (var item in modContentDB)
+                        {
+                            var modContentAsm = modelContent.FirstOrDefault(x => x.Controller == item.Controller && x.Action == item.Action);
+                            if (modContentAsm == null)
+                            {
+                                var modContentDel = context.ModuleContent.FirstOrDefault(x => x.Id == item.Id);
+                                context.ModuleContent.Remove(modContentDel);
+                                context.SaveChanges();
+                            }
+
+                        }
+
                         foreach (var modConfig in modelContent)
                         {
-                            var moduleContentAdd = new ModuleContent()
+                            var modContent = context.ModuleContent.FirstOrDefault(x => x.Controller == modConfig.Controller && x.Action == modConfig.Action);
+
+                            if(modContent==null)
+                            {
+                                var moduleContentAdd = new ModuleContent()
                                 {
                                     Controller = modConfig.Controller,
                                     Action = modConfig.Action,
@@ -204,9 +235,18 @@ namespace Itsomax.Module.Core.Extensions
                                 context.ModuleContent.Add(moduleContentAdd);
                                 context.SaveChanges();
 
+                            }
+                            else
+                            {
+                                modContent.Controller = modConfig.Controller;
+                                modContent.Action = modConfig.Action;
+                                modContent.ModulesId = modules.Id;
+                                context.Entry(modContent).State = EntityState.Modified;
+                                context.SaveChanges();
+                            }
                         }
                     }
-                    else //If module does not exists
+                    else //If module does not exists in Database
                     {
                         modules = new Modules
 						{
