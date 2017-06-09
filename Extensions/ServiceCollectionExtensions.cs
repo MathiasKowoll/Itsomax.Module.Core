@@ -18,6 +18,7 @@ using Itsomax.Data.Infrastructure;
 using Itsomax.Data.Infrastructure.Data;
 using Itsomax.Module.Core.Data;
 using Itsomax.Module.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 //using Hangfire;
 
 namespace Itsomax.Module.Core.Extensions
@@ -148,17 +149,19 @@ namespace Itsomax.Module.Core.Extensions
             
             
         }
+        
 		public static IServiceCollection AddCustomizedAuthorization(this IServiceCollection services)
 		{
 			services.AddAuthorization(options =>
 			{
 				options.AddPolicy("ManageAuthentification",
-				                  policy => policy.Requirements.Add(new ManageAuthentification()));
+				                  policy => policy.Requirements.Add(new ManageAuthentificationRequirement()));
 			});
 			                          
 
 			return services;
 		}
+        
 
 
         public static IServiceProvider Build(this IServiceCollection services,

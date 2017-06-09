@@ -106,6 +106,7 @@ namespace Itsomax.Module.Core.Extensions
             return app;
         }
 */
+
         public static IApplicationBuilder SeedData(this IApplicationBuilder app)
         {
             using (var context = app.ApplicationServices.GetRequiredService<ItsomaxDbContext>())

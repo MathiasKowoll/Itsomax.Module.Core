@@ -1,16 +1,45 @@
 ﻿using System.Threading.Tasks;
+using Itsomax.Module.Core.Data;
 using Microsoft.AspNetCore.Authorization;
+using System.Linq;
+using Itsomax.Data.Infrastructure.Data;
+using Itsomax.Module.Core.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Routing;
 
 namespace Itsomax.Module.Core.Extensions
 {
-	public class ManageAuthentification : AuthorizationHandler<ManageAuthentification>,IAuthorizationRequirement
+	public class ManageAuthentification : AuthorizationHandler<ManageAuthentificationRequirement>,IAuthorizationRequirement
 	{
-		protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ManageAuthentification requirement)
+        private readonly ItsomaxDbContext _context;
+        private readonly IHttpContextAccessor _contextAccessor;
+
+        public ManageAuthentification(UserManager<User> userManager,ItsomaxDbContext contextDb,IHttpContextAccessor contextAccessor)
+		{
+            _context = contextDb;
+            _contextAccessor = contextAccessor;
+
+        }
+
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ManageAuthentificationRequirement requirement)
 		{
 
-            //var path2 = RequestPath.Instance.CurrentContext.Request.Path.Value;
-			var user = context.User.ToString();
-			if (context.User.Identity.IsAuthenticated)
+           // var path2 = RequestPath.Instance.CurrentContext.Request.Path.Value;
+            var userName = context.User.Identity.Name;//ToString();
+            //var user = _userManager.FindByNameAsync(userName).Result;
+            //var userRoles = _userManager.GetRolesAsync(user);
+
+            var user = _context.Users.FirstOrDefault(x => x.UserName == userName);
+            //var userRoles = _context.UserRoles.Where(x => x.UserId == user.Id).AsQueryable();
+            //var modRoles = _context.ModuleRole
+
+            //var path = RequestPath.Instance.CurrentContext.Request.Path.Value;
+
+            
+
+            if (context.User.Identity.IsAuthenticated)
 			{
 				if (context.User.IsInRole("Admin"))
 				{
@@ -18,19 +47,37 @@ namespace Itsomax.Module.Core.Extensions
 					return Task.CompletedTask;
 				}
 
-                var path = RequestPath.Instance.CurrentContext.Request.Path.Value;
-                //string path;
-                if (context.User.HasClaim(c => c.Type.ToString() == "HasAccess" && path.ToString().Contains(c.Value.ToString())))
-				{
-					context.Succeed(requirement);
-					return Task.CompletedTask;
-				}
-				else
+                var path = _contextAccessor.HttpContext.GetRouteData();
+                var controller = path.Values["controller"].ToString();
+                var action = path.Values["action"].ToString();
+                var userPermission = from r in _context.Roles
+                                     join ur in _context.UserRoles on r.Id equals ur.RoleId
+                                     join u in _context.Users on ur.UserId equals u.Id
+                                     join mr in _context.ModuleRole on r.Id equals mr.RoleId
+                                     join mc in _context.ModuleContent on mr.ModulesId equals mc.ModulesId
+                                     join m in _context.Modules on mc.ModulesId equals m.Id
+                                     where (u.Id == user.Id) && (mc.Controller==controller) && (mc.Action == action)
+                                     select new { m.ShortName,mc.Controller,mc.Action };
+
+                if(userPermission.Count()==0)
 				{
 					context.Fail();
 					return Task.CompletedTask;
+
 				}
-			}
+				if(userPermission.Count() > 0)
+				{
+					context.Succeed(requirement);
+                    return Task.CompletedTask;
+                }
+				
+				else
+				{
+					context.Fail();
+                    return Task.CompletedTask;
+
+				}
+            }
 			else
 			{
                 context.Fail();
