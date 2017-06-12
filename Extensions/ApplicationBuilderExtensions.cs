@@ -207,7 +207,7 @@ namespace Itsomax.Module.Core.Extensions
                         context.Entry(modules).State = EntityState.Modified;
                         context.SaveChanges();
 
-                        var modContentDB = context.ModuleContent.Where(x => x.ModulesId == modules.Id);
+                        var modContentDB = context.ModuleContent.Where(x => x.ModulesId == modules.Id).ToList();
                         foreach (var item in modContentDB)
                         {
                             var modContentAsm = modelContent.FirstOrDefault(x => x.Controller == item.Controller && x.Action == item.Action);
