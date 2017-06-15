@@ -5,8 +5,8 @@ namespace Itsomax.Module.Core.Models
 {
     public class ModuleRole : EntityBase
     {
-        public long ModulesId { get; set; }
-        public Modules Modules { get; set; }
+        public long SubModuleId { get; set; }
+        public SubModule SubModule { get; set; }
         public long RoleId { get; set; }
         public Role Role { get; set; }
     }
