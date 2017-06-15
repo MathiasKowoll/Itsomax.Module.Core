@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Hosting;
 //using Hangfire;
 
 //using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace Itsomax.Module.Core.Extensions
 {
@@ -161,17 +162,6 @@ namespace Itsomax.Module.Core.Extensions
                     context.UserRoles.Add(userRole);
                     context.SaveChanges();
                 }
-                //TODO: Temporal solucion until I sort this out
-                //Postgres
-                //var sql = "TRUNCATE TABLE \"public\".\"Core_ModuleContent\"";
-                //SQL Server
-                //var sql = "TRUNCATE TABLE Core_ModuleContent";
-                //context.Database.ExecuteSqlCommand(sql);
-                //Postgres
-                //sql = "ALTER SEQUENCE \"public\".\"Core_ModuleContent_Id_seq\" restart;";
-                //SQL Server
-                //sql = "ALTER SEQUENCE \"public\".\"Core_ModuleContent_Id_seq\" restart;";
-                //context.Database.ExecuteSqlCommand(sql);
                 var modulesDB = context.Modules.ToList();
                 //Delete unused Modules
                 foreach (var item in modulesDB)
@@ -223,7 +213,6 @@ namespace Itsomax.Module.Core.Extensions
                         foreach (var modConfig in modelContent)
                         {
                             var modContent = context.ModuleContent.FirstOrDefault(x => x.Controller == modConfig.Controller && x.Action == modConfig.Action);
-
                             if(modContent==null)
                             {
                                 var moduleContentAdd = new ModuleContent()
@@ -245,6 +234,31 @@ namespace Itsomax.Module.Core.Extensions
                                 context.SaveChanges();
                             }
                         }
+                        var subModuleList = modelContent.Select(x => new { x.Controller }).Distinct();
+                        foreach(var sub in subModuleList)
+                        {
+                            var subExists = context.SubModule.FirstOrDefault(x => x.Name == sub.Controller);
+                            if(subExists==null)
+                            {
+                                var subModAdd = new SubModule()
+                                {
+                                    Name = sub.Controller,
+                                    ModulesId = modules.Id
+                                };
+                            }
+                        }
+                        var subModDB = context.SubModule;
+                        foreach(var item in subModDB)
+                        {
+                            var submodDll = modContentDB.FirstOrDefault(x => x.Controller == item.Name);
+                            if(submodDll==null)
+                            {
+                                var sub = context.SubModule.FirstOrDefault(x => x.Id == item.Id);
+                                context.SubModule.Remove(sub);
+                                context.SaveChanges();
+                            }
+                        }
+
                     }
                     else //If module does not exists in Database
                     {
@@ -269,6 +283,16 @@ namespace Itsomax.Module.Core.Extensions
                                 context.ModuleContent.Add(moduleContentAdd);
                                 context.SaveChanges();
 
+                        }
+                        var subModule = modelContent.Select(x => new { x.Controller }).Distinct();
+                        foreach(var item in subModule)
+                        {
+                            var subModuleAdd = new SubModule()
+                            {
+                                Name = item.Controller,
+                                ModulesId = modules.Id
+                            };
+                            context.SubModule.Add(subModuleAdd);
                         }
 
 
