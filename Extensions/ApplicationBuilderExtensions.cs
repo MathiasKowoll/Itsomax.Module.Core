@@ -234,20 +234,7 @@ namespace Itsomax.Module.Core.Extensions
                                 context.SaveChanges();
                             }
                         }
-                        var subModuleList = modelContent.Select(x => new { x.Controller }).Distinct();
-                        foreach(var sub in subModuleList)
-                        {
-                            var subExists = context.SubModule.FirstOrDefault(x => x.Name == sub.Controller);
-                            if(subExists==null)
-                            {
-                                var subModAdd = new SubModule()
-                                {
-                                    Name = sub.Controller,
-                                    ModulesId = modules.Id
-                                };
-                            }
-                        }
-                        var subModDB = context.SubModule;
+                        var subModDB = context.SubModule.ToList();
                         foreach(var item in subModDB)
                         {
                             var submodDll = modContentDB.FirstOrDefault(x => x.Controller == item.Name);
@@ -282,23 +269,40 @@ namespace Itsomax.Module.Core.Extensions
                                 };
                                 context.ModuleContent.Add(moduleContentAdd);
                                 context.SaveChanges();
-
                         }
-                        var subModule = modelContent.Select(x => new { x.Controller }).Distinct();
-                        foreach(var item in subModule)
-                        {
-                            var subModuleAdd = new SubModule()
-                            {
-                                Name = item.Controller,
-                                ModulesId = modules.Id
-                            };
-                            context.SubModule.Add(subModuleAdd);
-                        }
-
-
-
                     }
                 }
+
+                var subModules = context.ModuleContent.Where(x => x.Controller.Contains("Manage")).Select(x => new { x.ModulesId, x.Controller }).Distinct().ToList();
+                var subModulesDB = context.SubModule.ToList();
+
+                foreach(var item in subModulesDB)
+                {
+                    var existDbNotinMod = subModules.FirstOrDefault(x => x.Controller == item.Name);
+                    if(existDbNotinMod == null)
+                    {
+                        var subModRemove = context.SubModule.FirstOrDefault(x => x.Name == item.Name);
+                        context.SubModule.Remove(subModRemove);
+                        context.SaveChanges();
+                    }
+                }
+                var subModulesAdd = context.SubModule.ToList();
+                foreach(var item in subModules)
+                {
+                    var newSubModule = subModulesAdd.FirstOrDefault(x => x.Name == item.Controller);
+                    if(newSubModule == null)
+                    {
+                        var subModAdd = new SubModule()
+                        {
+                            ModulesId = subModules.FirstOrDefault(x => x.Controller == item.Controller).ModulesId,
+                            Name = item.Controller
+                        };
+                        context.SubModule.Add(subModAdd);
+                        context.SaveChanges();
+                    }
+                }
+
+
             }
             return app;
         }

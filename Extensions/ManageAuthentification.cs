@@ -54,10 +54,10 @@ namespace Itsomax.Module.Core.Extensions
                                      join ur in _context.UserRoles on r.Id equals ur.RoleId
                                      join u in _context.Users on ur.UserId equals u.Id
                                      join mr in _context.ModuleRole on r.Id equals mr.RoleId
-                                     join mc in _context.ModuleContent on mr.ModulesId equals mc.ModulesId
+                                     join mc in _context.SubModule on mr.SubModuleId equals mc.Id
                                      join m in _context.Modules on mc.ModulesId equals m.Id
-                                     where (u.Id == user.Id) && (mc.Controller==controller) && (mc.Action == action)
-                                     select new { m.ShortName,mc.Controller,mc.Action };
+                                     where (u.Id == user.Id) && (mc.Name == controller)
+                                     select new { m.ShortName, mc.Name };
 
                 if(userPermission.Count()==0)
 				{
