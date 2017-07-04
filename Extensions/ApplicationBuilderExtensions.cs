@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Hosting;
 
 //using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Identity;
 
 namespace Itsomax.Module.Core.Extensions
 {
@@ -110,6 +111,42 @@ namespace Itsomax.Module.Core.Extensions
 
         public static IApplicationBuilder SeedData(this IApplicationBuilder app)
         {
+            //bool roleExists;
+            //bool userExists;
+
+            using (var context = app.ApplicationServices.GetRequiredService<RoleManager<Role>>())
+            {
+                var roleExists = context.FindByNameAsync("Admin").Result;
+                if(roleExists == null)
+                {
+                    var role = new Role()
+                    {
+                        Name = "Admin"
+                    };
+                    var res = context.CreateAsync(role).Result;
+                }
+            }
+
+            using (var context = app.ApplicationServices.GetRequiredService<UserManager<User>>())
+            {
+
+                var userExists = context.FindByNameAsync("admin").Result;
+                if(userExists == null)
+                {
+                    var user = new User()
+                    {
+                        UserName = "admin",
+                        Email = "admin@admin.cl"
+                    };
+
+                    var res = context.CreateAsync(user, "Admin123.,").Result;
+                    if(res.Succeeded)
+                    {
+                        var res2 = context.AddToRoleAsync(user, "Admin").Result;
+                    }
+                }
+            }
+
             using (var context = app.ApplicationServices.GetRequiredService<ItsomaxDbContext>())
             {
 
@@ -120,7 +157,7 @@ namespace Itsomax.Module.Core.Extensions
                 }
 
 
-
+                /*
                 var role = context.Roles.FirstOrDefault(x => x.Name == "Admin");
                 if (role == null)
                 {
@@ -132,8 +169,8 @@ namespace Itsomax.Module.Core.Extensions
                     context.Roles.Add(role);
                     context.SaveChanges();
                 }
-
-
+                */
+                /*
                 var user = context.Users.FirstOrDefault(x => x.UserName == "admin");
                 if (user == null)
                 {
@@ -144,7 +181,8 @@ namespace Itsomax.Module.Core.Extensions
                         PasswordHash = "AM4OLBpptxBYmM79lGOX9egzZk3vIQU3d/gFCJzaBjAPXzYIK3tQ2N7X4fcrHtElTw==", //123qwe
                         EmailConfirmed = true,
                         NormalizedEmail = "ADMIN@ADMIN.COM",
-                        NormalizedUserName = "ADMIN"
+                        NormalizedUserName = "ADMIN",
+                        //SecurityStamp = 
                     };
                     context.Users.Add(user);
                     context.SaveChanges();
@@ -162,12 +200,13 @@ namespace Itsomax.Module.Core.Extensions
                     context.UserRoles.Add(userRole);
                     context.SaveChanges();
                 }
+                */
                 var modulesDB = context.Modules.ToList();
                 //Delete unused Modules
                 foreach (var item in modulesDB)
                 {
                     var existModuleGlobal = GlobalConfiguration.Modules.FirstOrDefault(x => x.Name == item.Name);
-                    if (existModuleGlobal==null)
+                    if (existModuleGlobal == null)
                     {
                         var moduleDelete = context.Modules.FirstOrDefault(x => x.Id == item.Id);
                         context.Modules.Remove(moduleDelete);
@@ -213,7 +252,7 @@ namespace Itsomax.Module.Core.Extensions
                         foreach (var modConfig in modelContent)
                         {
                             var modContent = context.ModuleContent.FirstOrDefault(x => x.Controller == modConfig.Controller && x.Action == modConfig.Action);
-                            if(modContent==null)
+                            if (modContent == null)
                             {
                                 var moduleContentAdd = new ModuleContent()
                                 {
@@ -235,10 +274,10 @@ namespace Itsomax.Module.Core.Extensions
                             }
                         }
                         var subModDB = context.SubModule.ToList();
-                        foreach(var item in subModDB)
+                        foreach (var item in subModDB)
                         {
                             var submodDll = modContentDB.FirstOrDefault(x => x.Controller == item.Name);
-                            if(submodDll==null)
+                            if (submodDll == null)
                             {
                                 var sub = context.SubModule.FirstOrDefault(x => x.Id == item.Id);
                                 context.SubModule.Remove(sub);
@@ -250,25 +289,25 @@ namespace Itsomax.Module.Core.Extensions
                     else //If module does not exists in Database
                     {
                         modules = new Modules
-						{
-							Name = moduleConfig.Name,
-							ShortName = moduleConfig.ShortName,
-							Path = moduleConfig.Path,
-							isValid = true
-						};
-						context.Modules.Add(modules);
-						context.SaveChanges();
+                        {
+                            Name = moduleConfig.Name,
+                            ShortName = moduleConfig.ShortName,
+                            Path = moduleConfig.Path,
+                            isValid = true
+                        };
+                        context.Modules.Add(modules);
+                        context.SaveChanges();
 
                         foreach (var modConfig in modelContent)
                         {
                             var moduleContentAdd = new ModuleContent()
-                                {
-                                    Controller = modConfig.Controller,
-                                    Action = modConfig.Action,
-                                    ModulesId = modules.Id
-                                };
-                                context.ModuleContent.Add(moduleContentAdd);
-                                context.SaveChanges();
+                            {
+                                Controller = modConfig.Controller,
+                                Action = modConfig.Action,
+                                ModulesId = modules.Id
+                            };
+                            context.ModuleContent.Add(moduleContentAdd);
+                            context.SaveChanges();
                         }
                     }
                 }
@@ -276,10 +315,10 @@ namespace Itsomax.Module.Core.Extensions
                 var subModules = context.ModuleContent.Where(x => x.Controller.Contains("Manage")).Select(x => new { x.ModulesId, x.Controller }).Distinct().ToList();
                 var subModulesDB = context.SubModule.ToList();
 
-                foreach(var item in subModulesDB)
+                foreach (var item in subModulesDB)
                 {
                     var existDbNotinMod = subModules.FirstOrDefault(x => x.Controller == item.Name);
-                    if(existDbNotinMod == null)
+                    if (existDbNotinMod == null)
                     {
                         var subModRemove = context.SubModule.FirstOrDefault(x => x.Name == item.Name);
                         context.SubModule.Remove(subModRemove);
@@ -287,10 +326,10 @@ namespace Itsomax.Module.Core.Extensions
                     }
                 }
                 var subModulesAdd = context.SubModule.ToList();
-                foreach(var item in subModules)
+                foreach (var item in subModules)
                 {
                     var newSubModule = subModulesAdd.FirstOrDefault(x => x.Name == item.Controller);
-                    if(newSubModule == null)
+                    if (newSubModule == null)
                     {
                         var subModAdd = new SubModule()
                         {
