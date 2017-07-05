@@ -149,60 +149,15 @@ namespace Itsomax.Module.Core.Extensions
 
             using (var context = app.ApplicationServices.GetRequiredService<ItsomaxDbContext>())
             {
+                /*
 
                 var pendingMigrations = context.Database.GetPendingMigrations().Count();
                 if (pendingMigrations >= 0)
                 {
                     context.Database.Migrate();
                 }
-
-
-                /*
-                var role = context.Roles.FirstOrDefault(x => x.Name == "Admin");
-                if (role == null)
-                {
-                    role = new Role
-                    {
-                        Name = "Admin",
-                        NormalizedName = "ADMIN"
-                    };
-                    context.Roles.Add(role);
-                    context.SaveChanges();
-                }
-                */
-                /*
-                var user = context.Users.FirstOrDefault(x => x.UserName == "admin");
-                if (user == null)
-                {
-                    user = new User
-                    {
-                        UserName = "admin",
-                        Email = "admin@admin.com",
-                        PasswordHash = "AM4OLBpptxBYmM79lGOX9egzZk3vIQU3d/gFCJzaBjAPXzYIK3tQ2N7X4fcrHtElTw==", //123qwe
-                        EmailConfirmed = true,
-                        NormalizedEmail = "ADMIN@ADMIN.COM",
-                        NormalizedUserName = "ADMIN",
-                        //SecurityStamp = 
-                    };
-                    context.Users.Add(user);
-                    context.SaveChanges();
-                }
-
-
-                var userRole = context.UserRoles.FirstOrDefault(x => x.RoleId == role.Id && x.UserId == user.Id);
-                if (userRole == null)
-                {
-                    userRole = new UserRole
-                    {
-                        RoleId = role.Id,
-                        UserId = user.Id
-                    };
-                    context.UserRoles.Add(userRole);
-                    context.SaveChanges();
-                }
                 */
                 var modulesDB = context.Modules.ToList();
-                //Delete unused Modules
                 foreach (var item in modulesDB)
                 {
                     var existModuleGlobal = GlobalConfiguration.Modules.FirstOrDefault(x => x.Name == item.Name);
@@ -217,7 +172,6 @@ namespace Itsomax.Module.Core.Extensions
                 foreach (var moduleConfig in GlobalConfiguration.Modules)
                 {
                     var asm = moduleConfig.Assembly;
-                    //var projectName = moduleConfig.Name;
                     var modelContent = asm.GetTypes().
                     SelectMany(t => t.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public))
                     .Where(d => d.ReturnType.Name.Contains("Result"))
