@@ -1,6 +1,6 @@
 using System;
-//using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 using Itsomax.Data.Infrastructure.Models;
 
 namespace Itsomax.Module.Core.Models
@@ -18,5 +18,6 @@ namespace Itsomax.Module.Core.Models
         public DateTimeOffset CreatedOn { get; set; }
 
         public DateTimeOffset UpdatedOn { get; set; }
+        public IList<UserRole> Roles { get; set; } =  new List<UserRole>();
     }
 }

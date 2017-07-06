@@ -5,7 +5,7 @@ namespace Itsomax.Module.Core.Extensions
 {
     public static class ApplicationBuilderHangfire
     {
-        public static IApplicationBuilder UseCustomizedHanfire(this IApplicationBuilder app)
+        public static IApplicationBuilder UseCustomizedHangfire(this IApplicationBuilder app)
         {
             app.UseHangfireDashboard();
             app.UseHangfireServer();

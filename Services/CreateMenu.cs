@@ -5,6 +5,8 @@ using System.IO;
 using Itsomax.Module.Core.Interfaces;
 using System.Linq;
 using Itsomax.Module.Core.Extensions.CommonHelpers;
+using System;
+
 namespace Itsomax.Module.Core.Services
 {
     public class CreateMenu :ICreateMenu
@@ -34,29 +36,36 @@ namespace Itsomax.Module.Core.Services
 
             foreach (var itemMod in modules)
             {
-                
+
                 sidebarMenu = sidebarMenu +
-                    "<li class=\"header\">"+StringHelperClass.CamelSplit(itemMod.ShortName).ToUpper() +"</li>";
+                    "@if ((User.HasClaim(c => c.Value.ToString()==\"HasAccess\" && (c.Type.Contains(\"User\") || c.Type.Contains(\"Role\"))) || User.IsInRole(\"Admin\")))" + Environment.NewLine +
+                    "{" +
+                    "<li class=\"header\">" + StringHelperClass.CamelSplit(itemMod.ShortName).ToUpper() + "</li>" + Environment.NewLine +
+                    "}"+Environment.NewLine;
                 foreach(var itemSubMod in subModules)
                 {
 					sidebarMenu = sidebarMenu +
-					"<li class=\"treeview\">" +
-					"<a href =\"#\">" +
-                    "<i class=\"fa fa-dashboard\"></i> <span>" + StringHelperClass.CamelSplit(itemSubMod.Name) + "</span>" +
-					"<span class=\"pull-right-container\">" +
-					"<i class=\"fa fa-angle-left pull-right\"></i>" +
-					"</span>" +
-					"</a>" +
-					"<ul class=\"treeview-menu\">";
+					"<li class=\"treeview\">" + Environment.NewLine+
+
+                    "<a href =\"#\">" + Environment.NewLine+
+                    "<i class=\"fa fa-dashboard\"></i> <span>" + StringHelperClass.CamelSplit(itemSubMod.Name) + "</span>" + Environment.NewLine+
+
+                    "<span class=\"pull-right-container\">" + Environment.NewLine+
+
+                    "<i class=\"fa fa-angle-left pull-right\"></i>" + Environment.NewLine+
+
+                    "</span>" + Environment.NewLine +
+                    "</a>" + Environment.NewLine +
+                    "<ul class=\"treeview-menu\">" + Environment.NewLine;
                     var modContent = _moduleContent.Query().Where(x => x.ModulesId == itemMod.Id && !x.Action.ToUpper().Contains("VIEW") && x.Controller == itemSubMod.Name).ToList();
 					foreach (var itemCon in modContent)
 					{
 						sidebarMenu = sidebarMenu +
-						"<li><a href=\"/" + itemCon.Controller + "/" + itemCon.Action + "\"><i class=\"fa fa-circle-o\"></i>" + StringHelperClass.CamelSplit(itemCon.Action) + "</a></li>";
+						"<li><a href=\"/" + itemCon.Controller + "/" + itemCon.Action + "\"><i class=\"fa fa-circle-o\"></i>" + StringHelperClass.CamelSplit(itemCon.Action) + "</a></li>"+ Environment.NewLine;
 					}
                     sidebarMenu = sidebarMenu +
-                        "</ul>" +
-                        "</li>";
+                        "</ul>" + Environment.NewLine +
+                        "</li>" + Environment.NewLine ;
                 }
     
             }
