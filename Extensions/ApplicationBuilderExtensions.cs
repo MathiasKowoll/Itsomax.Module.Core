@@ -207,9 +207,11 @@ namespace Itsomax.Module.Core.Extensions
                                     context.SaveChanges();
                                 }
                             }
+                            /*
                             var subModDB = context.SubModule.ToList();
                             foreach (var item in subModDB)
                             {
+                                var testsubmodDll = modContentDB.Distinct().ToList();
                                 var submodDll = modContentDB.FirstOrDefault(x => x.Controller == item.Name);
                                 if (submodDll == null)
                                 {
@@ -218,6 +220,7 @@ namespace Itsomax.Module.Core.Extensions
                                     context.SaveChanges();
                                 }
                             }
+                            */
 
                         }
                         else //If module does not exists in Database
