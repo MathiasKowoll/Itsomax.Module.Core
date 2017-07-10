@@ -39,13 +39,15 @@ namespace Itsomax.Module.Core.Services
 
                 sidebarMenu = sidebarMenu +
                     "@if ((User.HasClaim(c => c.Value.ToString()==\"HasAccess\" && (c.Type.Contains(\"User\") || c.Type.Contains(\"Role\"))) || User.IsInRole(\"Admin\")))" + Environment.NewLine +
-                    "{" +
+                    "{" + Environment.NewLine +
                     "<li class=\"header\">" + StringHelperClass.CamelSplit(itemMod.ShortName).ToUpper() + "</li>" + Environment.NewLine +
                     "}"+Environment.NewLine;
                 foreach(var itemSubMod in subModules)
                 {
 					sidebarMenu = sidebarMenu +
-					"<li class=\"treeview\">" + Environment.NewLine+
+                    "@if ((User.HasClaim(c => c.Value.ToString()==\"HasAccess\" && (c.Type.Contains(\""+itemSubMod.Name+"\"))) || User.IsInRole(\"Admin\")))" + Environment.NewLine +
+                    "{" + Environment.NewLine +
+                    "<li class=\"treeview\">" + Environment.NewLine+
 
                     "<a href =\"#\">" + Environment.NewLine+
                     "<i class=\"fa fa-dashboard\"></i> <span>" + StringHelperClass.CamelSplit(itemSubMod.Name) + "</span>" + Environment.NewLine+
@@ -65,7 +67,8 @@ namespace Itsomax.Module.Core.Services
 					}
                     sidebarMenu = sidebarMenu +
                         "</ul>" + Environment.NewLine +
-                        "</li>" + Environment.NewLine ;
+                        "</li>" + Environment.NewLine +
+                        "}" + Environment.NewLine;
                 }
     
             }

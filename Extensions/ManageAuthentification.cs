@@ -48,7 +48,14 @@ namespace Itsomax.Module.Core.Extensions
 				}
 				var path = _contextAccessor.HttpContext.GetRouteData();
 				var controller = path.Values["controller"].ToString();
-				//var action = path.Values["action"].ToString();
+				var action = path.Values["action"].ToString();
+
+                if(action=="WelcomePage")
+                {
+                    context.Succeed(requirement);
+                    return Task.CompletedTask;
+                }
+
                 if(context.User.HasClaim(x => x.Type==controller && x.Value=="HasAccess"))
                 {
                     context.Succeed(requirement);
