@@ -48,7 +48,7 @@ namespace Itsomax.Module.Core.Data
                 if (entity.ClrType.Namespace != null)
                 {
                     var nameParts = entity.ClrType.Namespace.Split('.');
-                    var tableName = string.Concat(nameParts[2], "_", entity.ClrType.Name);
+                    var tableName = string.Concat(nameParts[2].Replace("Management",""), "_", entity.ClrType.Name);
                     modelBuilder.Entity(entity.Name).ToTable(tableName);
                 }
             }
