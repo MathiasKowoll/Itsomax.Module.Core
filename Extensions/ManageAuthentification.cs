@@ -55,7 +55,7 @@ namespace Itsomax.Module.Core.Extensions
                     context.Succeed(requirement);
                     return Task.CompletedTask;
                 }
-                if (action == "ChangePasswordView"))
+                if (action == "ChangePasswordView")
                 {
                     context.Succeed(requirement);
                     return Task.CompletedTask;
