@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Itsomax.Data.Infrastructure;
@@ -21,6 +22,7 @@ namespace Itsomax.Module.Core.Data
 		public DbSet<ModuleContent> ModuleContent { get; set; }
         public DbSet<ModuleRole> ModuleRole { get; set; }
         public DbSet<SubModule> SubModule { get; set; }
+        public DbSet<AppSetting> AppSettings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -49,7 +49,19 @@ namespace Itsomax.Module.Core.Extensions
 				var path = _contextAccessor.HttpContext.GetRouteData();
 				var controller = path.Values["controller"].ToString();
 				var action = path.Values["action"].ToString();
-                if(context.User.HasClaim(x => x.Type==controller && x.Value=="HasAccess"))
+
+                if(action=="WelcomePage")
+                {
+                    context.Succeed(requirement);
+                    return Task.CompletedTask;
+                }
+                if (action == "ChangePasswordView"))
+                {
+                    context.Succeed(requirement);
+                    return Task.CompletedTask;
+                }
+
+                if (context.User.HasClaim(x => x.Type==controller && x.Value=="HasAccess"))
                 {
                     context.Succeed(requirement);
                     return Task.CompletedTask;
@@ -59,36 +71,7 @@ namespace Itsomax.Module.Core.Extensions
                     context.Fail();
                     return Task.CompletedTask;
                 }
-                /*
-                
-                var userPermission = from r in _context.Roles
-                                     join ur in _context.UserRoles on r.Id equals ur.RoleId
-                                     join u in _context.Users on ur.UserId equals u.Id
-                                     join mr in _context.ModuleRole on r.Id equals mr.RoleId
-                                     join mc in _context.SubModule on mr.SubModuleId equals mc.Id
-                                     join m in _context.Modules on mc.ModulesId equals m.Id
-                                     where (u.Id == user.Id) && (mc.Name == controller)
-                                     select new { m.ShortName, mc.Name };
 
-                if(userPermission.Count()==0)
-				{
-					context.Fail();
-					return Task.CompletedTask;
-
-				}
-				if(userPermission.Count() > 0)
-				{
-					context.Succeed(requirement);
-                    return Task.CompletedTask;
-                }
-				
-				else
-				{
-					context.Fail();
-                    return Task.CompletedTask;
-
-				}
-				*/
             }
 			else
 			{

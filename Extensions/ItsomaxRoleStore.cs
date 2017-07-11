@@ -1,4 +1,5 @@
-using System.Security.Claims;
+//using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Itsomax.Module.Core.Data;
 using Itsomax.Module.Core.Models;
@@ -11,9 +12,9 @@ namespace Itsomax.Module.Core.Extensions
         {
         }
 
-        protected override IdentityRoleClaim<long> CreateRoleClaim(Role role, Claim claim)
-        {
-            return new IdentityRoleClaim<long> { RoleId = role.Id, ClaimType = claim.Type, ClaimValue = claim.Value };
-        }
+        //protected override IdentityRoleClaim<long> CreateRoleClaim(Role role, Claim claim)
+        //{
+        //    return new IdentityRoleClaim<long> { RoleId = role.Id, ClaimType = claim.Type, ClaimValue = claim.Value };
+        //}
     }
 }

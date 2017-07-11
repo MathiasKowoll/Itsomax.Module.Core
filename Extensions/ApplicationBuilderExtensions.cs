@@ -101,112 +101,141 @@ namespace Itsomax.Module.Core.Extensions
             return app;
         }
 
-        /* 
-        public static IApplicationBuilder UseCustomizeHttpContext(this IApplicationBuilder app)
+        public static IApplicationBuilder SeedData(this IApplicationBuilder app, IConfiguration config)
         {
-            RequestPath.Instance= new RequestPath (app.ApplicationServices.GetService<IHttpContextAccessor>());
-            return app;
-        }
-*/
-
-        public static IApplicationBuilder SeedData(this IApplicationBuilder app)
-        {
-            //bool roleExists;
-            //bool userExists;
-
-            using (var context = app.ApplicationServices.GetRequiredService<RoleManager<Role>>())
-            {
-                var roleExists = context.FindByNameAsync("Admin").Result;
-                if(roleExists == null)
-                {
-                    var role = new Role()
-                    {
-                        Name = "Admin"
-                    };
-                    var res = context.CreateAsync(role).Result;
-                }
-            }
-
-            using (var context = app.ApplicationServices.GetRequiredService<UserManager<User>>())
-            {
-
-                var userExists = context.FindByNameAsync("admin").Result;
-                if(userExists == null)
-                {
-                    var user = new User()
-                    {
-                        UserName = "admin",
-                        Email = "admin@admin.cl"
-                    };
-
-                    var res = context.CreateAsync(user, "Admin123.,").Result;
-                    if(res.Succeeded)
-                    {
-                        var res2 = context.AddToRoleAsync(user, "Admin").Result;
-                    }
-                }
-            }
-
             using (var context = app.ApplicationServices.GetRequiredService<ItsomaxDbContext>())
             {
-                /*
-
-                var pendingMigrations = context.Database.GetPendingMigrations().Count();
-                if (pendingMigrations >= 0)
+                var dataBaseExists = context.Database.GetAppliedMigrations().Count();
+                if (dataBaseExists > 0)
                 {
-                    context.Database.Migrate();
-                }
-                */
-                var modulesDB = context.Modules.ToList();
-                foreach (var item in modulesDB)
-                {
-                    var existModuleGlobal = GlobalConfiguration.Modules.FirstOrDefault(x => x.Name == item.Name);
-                    if (existModuleGlobal == null)
+                    //Default Settings
+                    var appSettings = context.AppSettings.ToList().Count();
+                    if (appSettings==0)
                     {
-                        var moduleDelete = context.Modules.FirstOrDefault(x => x.Id == item.Id);
-                        context.Modules.Remove(moduleDelete);
+                        var appSettingsAdd = new []
+                        {
+                            new AppSetting {Key = "NewInstallation", Value = "true"},
+                            new AppSetting {Key = "CreateAdmin", Value = "true"},
+                            new AppSetting {Key = "RefreshClaims", Value = "true"},
+                            new AppSetting {Key = "SmptUrl", Value = ""},
+                            new AppSetting {Key = "SmptAccount", Value = ""},
+                            new AppSetting {Key = "SmptPassword", Value = ""},
+                            new AppSetting {Key = "AdminMessage", Value =config.GetSection("WelcomePage:Message").Value}
+                            /*
+                            new AppSetting {Value = "SmptAdress", Key = ""},
+                            new AppSetting {Value = "SmptAdress", Key = ""},
+                            new AppSetting {Value = "SmptAdress", Key = ""},
+                            new AppSetting {Value = "SmptAdress", Key = ""},
+                            new AppSetting {Value = "SmptAdress", Key = ""},
+                            new AppSetting {Value = "SmptAdress", Key = ""},
+                            new AppSetting {Value = "SmptAdress", Key = ""},
+                            new AppSetting {Value = "SmptAdress", Key = ""},
+                            */
+                        };
+                        context.AppSettings.AddRange(appSettingsAdd);
                         context.SaveChanges();
                     }
-                }
 
-                foreach (var moduleConfig in GlobalConfiguration.Modules)
-                {
-                    var asm = moduleConfig.Assembly;
-                    var modelContent = asm.GetTypes().
-                    SelectMany(t => t.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public))
-                    .Where(d => d.ReturnType.Name.Contains("Result"))
-                    .Select(n => new ModuleContent()
+
+                    var modulesDB = context.Modules.ToList();
+                    foreach (var item in modulesDB)
                     {
-                        Controller = n.DeclaringType?.Name.Replace("Controller", ""),
-                        Action = n.Name
-                    });
 
-                    var modules = context.Modules.FirstOrDefault(z => z.Name == moduleConfig.Name);
-
-                    if (modules != null)
-                    {
-                        modules.Path = moduleConfig.Path;
-                        context.Modules.Update(modules);
-                        context.Entry(modules).State = EntityState.Modified;
-                        context.SaveChanges();
-
-                        var modContentDB = context.ModuleContent.Where(x => x.ModulesId == modules.Id).ToList();
-                        foreach (var item in modContentDB)
+                        var existModuleGlobal = GlobalConfiguration.Modules.FirstOrDefault(x => x.Name == item.Name);
+                        if (existModuleGlobal == null)
                         {
-                            var modContentAsm = modelContent.FirstOrDefault(x => x.Controller == item.Controller && x.Action == item.Action);
-                            if (modContentAsm == null)
+                            var moduleDelete = context.Modules.FirstOrDefault(x => x.Id == item.Id);
+                            context.Modules.Remove(moduleDelete);
+                            context.SaveChanges();
+                        }
+                    }
+                    foreach (var moduleConfig in GlobalConfiguration.Modules)
+                    {
+                        var asm = moduleConfig.Assembly;
+                        var modelContent = asm.GetTypes().
+                        SelectMany(t => t.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public))
+                        .Where(d => d.ReturnType.Name.Contains("Result"))
+                        .Select(n => new ModuleContent()
+                        {
+                            Controller = n.DeclaringType?.Name.Replace("Controller", ""),
+                            Action = n.Name
+                        });
+
+                        var modules = context.Modules.FirstOrDefault(z => z.Name == moduleConfig.Name);
+
+                        if (modules != null)
+                        {
+                            modules.Path = moduleConfig.Path;
+                            context.Modules.Update(modules);
+                            context.Entry(modules).State = EntityState.Modified;
+                            context.SaveChanges();
+
+                            var modContentDB = context.ModuleContent.Where(x => x.ModulesId == modules.Id).ToList();
+                            foreach (var item in modContentDB)
                             {
-                                var modContentDel = context.ModuleContent.FirstOrDefault(x => x.Id == item.Id);
-                                context.ModuleContent.Remove(modContentDel);
-                                context.SaveChanges();
+                                var modContentAsm = modelContent.FirstOrDefault(x => x.Controller == item.Controller && x.Action == item.Action);
+                                if (modContentAsm == null)
+                                {
+                                    var modContentDel = context.ModuleContent.FirstOrDefault(x => x.Id == item.Id);
+                                    context.ModuleContent.Remove(modContentDel);
+                                    context.SaveChanges();
+                                }
+
                             }
 
-                        }
+                            foreach (var modConfig in modelContent)
+                            {
+                                var modContent = context.ModuleContent.FirstOrDefault(x => x.Controller == modConfig.Controller && x.Action == modConfig.Action);
+                                if (modContent == null)
+                                {
+                                    var moduleContentAdd = new ModuleContent()
+                                    {
+                                        Controller = modConfig.Controller,
+                                        Action = modConfig.Action,
+                                        ModulesId = modules.Id
+                                    };
+                                    context.ModuleContent.Add(moduleContentAdd);
+                                    context.SaveChanges();
 
-                        foreach (var modConfig in modelContent)
+                                }
+                                else
+                                {
+                                    modContent.Controller = modConfig.Controller;
+                                    modContent.Action = modConfig.Action;
+                                    modContent.ModulesId = modules.Id;
+                                    context.Entry(modContent).State = EntityState.Modified;
+                                    context.SaveChanges();
+                                }
+                            }
+                            /*
+                            var subModDB = context.SubModule.ToList();
+                            foreach (var item in subModDB)
+                            {
+                                var testsubmodDll = modContentDB.Distinct().ToList();
+                                var submodDll = modContentDB.FirstOrDefault(x => x.Controller == item.Name);
+                                if (submodDll == null)
+                                {
+                                    var sub = context.SubModule.FirstOrDefault(x => x.Id == item.Id);
+                                    context.SubModule.Remove(sub);
+                                    context.SaveChanges();
+                                }
+                            }
+                            */
+
+                        }
+                        else //If module does not exists in Database
                         {
-                            var modContent = context.ModuleContent.FirstOrDefault(x => x.Controller == modConfig.Controller && x.Action == modConfig.Action);
-                            if (modContent == null)
+                            modules = new Modules
+                            {
+                                Name = moduleConfig.Name,
+                                ShortName = moduleConfig.ShortName,
+                                Path = moduleConfig.Path,
+                                isValid = true
+                            };
+                            context.Modules.Add(modules);
+                            context.SaveChanges();
+
+                            foreach (var modConfig in modelContent)
                             {
                                 var moduleContentAdd = new ModuleContent()
                                 {
@@ -216,84 +245,45 @@ namespace Itsomax.Module.Core.Extensions
                                 };
                                 context.ModuleContent.Add(moduleContentAdd);
                                 context.SaveChanges();
-
-                            }
-                            else
-                            {
-                                modContent.Controller = modConfig.Controller;
-                                modContent.Action = modConfig.Action;
-                                modContent.ModulesId = modules.Id;
-                                context.Entry(modContent).State = EntityState.Modified;
-                                context.SaveChanges();
                             }
                         }
-                        var subModDB = context.SubModule.ToList();
-                        foreach (var item in subModDB)
-                        {
-                            var submodDll = modContentDB.FirstOrDefault(x => x.Controller == item.Name);
-                            if (submodDll == null)
-                            {
-                                var sub = context.SubModule.FirstOrDefault(x => x.Id == item.Id);
-                                context.SubModule.Remove(sub);
-                                context.SaveChanges();
-                            }
-                        }
-
                     }
-                    else //If module does not exists in Database
-                    {
-                        modules = new Modules
-                        {
-                            Name = moduleConfig.Name,
-                            ShortName = moduleConfig.ShortName,
-                            Path = moduleConfig.Path,
-                            isValid = true
-                        };
-                        context.Modules.Add(modules);
-                        context.SaveChanges();
 
-                        foreach (var modConfig in modelContent)
+                    var subModules = context.ModuleContent.Where(x => x.Controller.Contains("Manage")).Select(x => new { x.ModulesId, x.Controller }).Distinct().ToList();
+                    var subModulesDB = context.SubModule.ToList();
+
+                    foreach (var item in subModulesDB)
+                    {
+                        var existDbNotinMod = subModules.FirstOrDefault(x => x.Controller == item.Name);
+                        if (existDbNotinMod == null)
                         {
-                            var moduleContentAdd = new ModuleContent()
+                            var subModRemove = context.SubModule.FirstOrDefault(x => x.Name == item.Name);
+                            context.SubModule.Remove(subModRemove);
+                            context.SaveChanges();
+                        }
+                    }
+                    var subModulesAdd = context.SubModule.ToList();
+                    foreach (var item in subModules)
+                    {
+                        var newSubModule = subModulesAdd.FirstOrDefault(x => x.Name == item.Controller);
+                        if (newSubModule == null)
+                        {
+                            var subModAdd = new SubModule()
                             {
-                                Controller = modConfig.Controller,
-                                Action = modConfig.Action,
-                                ModulesId = modules.Id
+                                ModulesId = subModules.FirstOrDefault(x => x.Controller == item.Controller).ModulesId,
+                                Name = item.Controller
                             };
-                            context.ModuleContent.Add(moduleContentAdd);
+                            context.SubModule.Add(subModAdd);
                             context.SaveChanges();
                         }
                     }
                 }
 
-                var subModules = context.ModuleContent.Where(x => x.Controller.Contains("Manage")).Select(x => new { x.ModulesId, x.Controller }).Distinct().ToList();
-                var subModulesDB = context.SubModule.ToList();
-
-                foreach (var item in subModulesDB)
-                {
-                    var existDbNotinMod = subModules.FirstOrDefault(x => x.Controller == item.Name);
-                    if (existDbNotinMod == null)
-                    {
-                        var subModRemove = context.SubModule.FirstOrDefault(x => x.Name == item.Name);
-                        context.SubModule.Remove(subModRemove);
-                        context.SaveChanges();
-                    }
-                }
-                var subModulesAdd = context.SubModule.ToList();
-                foreach (var item in subModules)
-                {
-                    var newSubModule = subModulesAdd.FirstOrDefault(x => x.Name == item.Controller);
-                    if (newSubModule == null)
-                    {
-                        var subModAdd = new SubModule()
-                        {
-                            ModulesId = subModules.FirstOrDefault(x => x.Controller == item.Controller).ModulesId,
-                            Name = item.Controller
-                        };
-                        context.SubModule.Add(subModAdd);
-                        context.SaveChanges();
-                    }
-                }
+                //var pendingMigrations = context.Database.GetPendingMigrations().Count();
+                //if (pendingMigrations > 0)
+                //{
+                //  context.Database.Migrate();
+                //}
 
 
             }
