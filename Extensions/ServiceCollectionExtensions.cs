@@ -19,6 +19,7 @@ using Itsomax.Data.Infrastructure.Data;
 using Itsomax.Module.Core.Data;
 using Itsomax.Module.Core.Models;
 using Microsoft.AspNetCore.Authorization;
+using NToastNotify;
 //using Hangfire;
 
 namespace Itsomax.Module.Core.Extensions
@@ -72,6 +73,19 @@ namespace Itsomax.Module.Core.Extensions
             GlobalConfiguration.Modules = modules;
             return services;
         }
+        /*
+        public static IServiceCollection AddToastNotification(this IServiceCollection services)
+        {
+            services.AddNToastNotify(new ToastOption()
+            {
+                ProgressBar = true,
+                PositionClass = ToastPositions.TopCenter
+            });
+
+            return services;
+        }
+        */
+
         public static IServiceCollection AddCustomizedMvc(this IServiceCollection services, IList<ModuleInfo> modules)
         {
             var mvcBuilder = services

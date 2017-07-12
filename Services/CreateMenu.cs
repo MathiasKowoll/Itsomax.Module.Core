@@ -30,7 +30,7 @@ namespace Itsomax.Module.Core.Services
             var file = "_AdminSideMenu.cshtml";
 
             var modules = _module.Query().Where(x => x.isValid==true && x.ShortName.Contains("Management")).ToList();
-            var subModules = _subModule.Query().ToList();
+            
 
             string sidebarMenu = "";//"<li class=\"header\">MAIN NAVIGATION</li>";
 
@@ -42,7 +42,8 @@ namespace Itsomax.Module.Core.Services
                     "{" + Environment.NewLine +
                     "<li class=\"header\">" + StringHelperClass.CamelSplit(itemMod.ShortName).ToUpper() + "</li>" + Environment.NewLine +
                     "}"+Environment.NewLine;
-                foreach(var itemSubMod in subModules)
+                var subModules = _subModule.Query().Where(x => x.ModulesId==itemMod.Id).ToList();
+                foreach (var itemSubMod in subModules)
                 {
 					sidebarMenu = sidebarMenu +
                     "@if ((User.HasClaim(c => c.Value.ToString()==\"HasAccess\" && (c.Type.Contains(\""+itemSubMod.Name+"\"))) || User.IsInRole(\"Admin\")))" + Environment.NewLine +
