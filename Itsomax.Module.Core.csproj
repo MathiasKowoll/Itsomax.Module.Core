@@ -18,6 +18,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Itsomax.Data.Infrastructure\Itsomax.Data.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Libraries\NToastNotify\NToastNotify.csproj" />
+    <ProjectReference Include="..\..\Libraries\NToastNotify\src\NToastNotify.csproj" />
   </ItemGroup>
 </Project>
