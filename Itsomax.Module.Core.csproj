@@ -15,9 +15,9 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.0.0-preview2-final" />
     <PackageReference Include="System.Data.SqlClient" Version="4.4.0-preview2-25405-01" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
+    <PackageReference Include="NToastNotify " Version="3.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Itsomax.Data.Infrastructure\Itsomax.Data.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Libraries\NToastNotify\src\NToastNotify.csproj" />
   </ItemGroup>
 </Project>
