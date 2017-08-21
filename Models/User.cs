@@ -5,7 +5,7 @@ using Itsomax.Data.Infrastructure.Models;
 
 namespace Itsomax.Module.Core.Models
 {
-    public class User : IdentityUser<long, IdentityUserClaim<long>, UserRole, IdentityUserLogin<long>, IdentityUserToken<long>>, IEntityWithTypedId<long>
+    public class User : IdentityUser<long>, IEntityWithTypedId<long>
     {
         public User()
         {

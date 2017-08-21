@@ -116,21 +116,21 @@ namespace Itsomax.Module.Core.Extensions
             //var configSystem = configuration.GetSection("UseSystem:DefaultApp").Value;
             //if(configSystem=="ItsomaxCMS")
             //{
-                services.AddIdentity<User, Role>(o =>
-                {
-                    o.Password.RequireDigit = Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireDigit").Value);
-                    o.Password.RequireNonAlphanumeric = Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireNonAlphanumeric").Value);
-                    o.Password.RequiredLength = Convert.ToInt32(configuration.GetSection("ConfigSystem:RequiredLength").Value);
-                    o.Password.RequireLowercase = Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireLowercase").Value);
-                    o.Password.RequireUppercase = Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireUppercase").Value);
-                    o.Lockout.AllowedForNewUsers = Convert.ToBoolean(configuration.GetSection("ConfigSystem:AllowedForNewUsers").Value);
-                    o.Lockout.MaxFailedAccessAttempts = Convert.ToInt32(configuration.GetSection("ConfigSystem:MaxFailedAccessAttempts").Value);
-                    o.Lockout.DefaultLockoutTimeSpan = System.TimeSpan.FromDays(Convert.ToInt32(configuration.GetSection("ConfigSystem:DefaultLockoutTimeSpanDays").Value));
+            services.AddIdentity<User, Role>(o =>
+            {
+                o.Password.RequireDigit = Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireDigit").Value);
+                o.Password.RequireNonAlphanumeric = Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireNonAlphanumeric").Value);
+                o.Password.RequiredLength = Convert.ToInt32(configuration.GetSection("ConfigSystem:RequiredLength").Value);
+                o.Password.RequireLowercase = Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireLowercase").Value);
+                o.Password.RequireUppercase = Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireUppercase").Value);
+                o.Lockout.AllowedForNewUsers = Convert.ToBoolean(configuration.GetSection("ConfigSystem:AllowedForNewUsers").Value);
+                o.Lockout.MaxFailedAccessAttempts = Convert.ToInt32(configuration.GetSection("ConfigSystem:MaxFailedAccessAttempts").Value);
+                o.Lockout.DefaultLockoutTimeSpan = System.TimeSpan.FromDays(Convert.ToInt32(configuration.GetSection("ConfigSystem:DefaultLockoutTimeSpanDays").Value));
 
             })
-                .AddRoleStore<ItsomaxRoleStore>()
-                .AddUserStore<ItsomaxUserStore>()
-                .AddDefaultTokenProviders();
+            .AddRoleStore<ItsomaxRoleStore>()
+            .AddUserStore<ItsomaxUserStore>();
+                //.AddDefaultTokenProviders();
                 services.ConfigureApplicationCookie(o =>
                 {
                     o.LoginPath = Convert.ToString(configuration.GetSection("ConfigSystem:LoginPath").Value);
