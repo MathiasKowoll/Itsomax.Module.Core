@@ -150,13 +150,13 @@ namespace Itsomax.Module.Core.Extensions
 			{
 				services.AddDbContext<ItsomaxDbContext>(options =>
 				options.UseNpgsql(configuration.GetConnectionString("Postgres"),              
-					b => b.MigrationsAssembly("Itsomax.WebHost")));
+					b => b.MigrationsAssembly("Itsomax.AppHost")));
 			}
             
             if (configDb == "SqlServer"){
 				services.AddDbContext<ItsomaxDbContext>(options =>
 		        options.UseSqlServer(configuration.GetConnectionString("SqlServer"),
-				    b => b.MigrationsAssembly("Itsomax.WebHost")));
+				    b => b.MigrationsAssembly("Itsomax.AppHost")));
 				
 			}
 			return services;

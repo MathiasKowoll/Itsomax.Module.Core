@@ -20,4 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Itsomax.Data.Infrastructure\Itsomax.Data.Infrastructure.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="NToastNotify" Version="3.0.1" />
+  </ItemGroup>
 </Project>
