@@ -20,6 +20,9 @@ using Itsomax.Module.Core.Data;
 using Itsomax.Module.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using NToastNotify;
+using Itsomax.Data.Infrastructure.Web.ModelBinders;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 //using Hangfire;
 
 namespace Itsomax.Module.Core.Extensions
@@ -73,23 +76,21 @@ namespace Itsomax.Module.Core.Extensions
             GlobalConfiguration.Modules = modules;
             return services;
         }
-        /*
-        public static IServiceCollection AddToastNotification(this IServiceCollection services)
-        {
-            services.AddNToastNotify(new ToastOption()
-            {
-                ProgressBar = true,
-                PositionClass = ToastPositions.TopCenter
-            });
-
-            return services;
-        }
-        */
 
         public static IServiceCollection AddCustomizedMvc(this IServiceCollection services, IList<ModuleInfo> modules)
         {
             var mvcBuilder = services
-                .AddMvc()
+                .AddMvc(o =>
+                {
+                    o.ModelBinderProviders.Insert(0, new InvariantDecimalModelBinderProvider());
+                })
+                .AddRazorOptions(o =>
+                {
+                    foreach (var module in modules)
+                    {
+                        o.AdditionalCompilationReferences.Add(MetadataReference.CreateFromFile(module.Assembly.Location));
+                    }
+                })
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization();
 
@@ -186,6 +187,7 @@ namespace Itsomax.Module.Core.Extensions
             builder.RegisterGeneric(typeof(RepositoryWithTypedId<,>)).As(typeof(IRepositoryWithTypedId<,>));
 
             builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly).AsImplementedInterfaces();
+            builder.RegisterType<SequentialMediator>().As<IMediator>();
             builder.Register<SingleInstanceFactory>(ctx =>
             {
                 var c = ctx.Resolve<IComponentContext>();
@@ -206,12 +208,15 @@ namespace Itsomax.Module.Core.Extensions
             builder.RegisterInstance(configuration);
             builder.RegisterInstance(hostingEnvironment);
             builder.Populate(services);
-
-
             var container = builder.Build();
             return container.Resolve<IServiceProvider>();
+        }
 
-            
+        private static Task HandleRemoteLoginFailure(RemoteFailureContext ctx)
+        {
+            ctx.Response.Redirect("/Login");
+            ctx.HandleResponse();
+            return Task.CompletedTask;
         }
 
     }
