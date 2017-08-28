@@ -1,12 +1,13 @@
 ﻿using Itsomax.Data.Infrastructure.Models;
-using System;
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace Itsomax.Module.Core.Models
 {
-    public class AuditLog : EntityBase
+    public class ErrorLog : EntityBase
     {
-        public AuditLog()
+
+        public ErrorLog()
         {
             CreatedOn = DateTimeOffset.Now;
         }
