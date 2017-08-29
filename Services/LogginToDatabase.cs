@@ -20,41 +20,41 @@ namespace Itsomax.Module.Core.Extensions
             _repoError = repoError;
         }
 
-        public void InformationLog(string message,string detail,string user)
+        public void InformationLog(string message,string action,string detail,string user)
         {
             _logger.LogInformation(message, detail);
-            var audit = new AuditLog { Message = message, Detail = detail, Hostname = _remote.GetHostname(), IP = _remote.GetIp(), LogType = "Information", UserName = user };
+            var audit = new AuditLog { Message = message, Detail = detail, Hostname = _remote.GetHostname(), IP = _remote.GetIp(), LogType = "Information", UserName = user,ActionTrigered=action };
             _repoAudit.Add(audit);
             _repoAudit.SaveChange();
         }
 
-        public void InformationLog(string message, string detail)
+        public void InformationLog(string message, string action, string detail)
         {
-            InformationLog(message, detail, string.Empty);
+            InformationLog(message,action, detail, string.Empty);
         }
 
-        public void InformationLog(string message)
+        public void InformationLog(string message, string Action)
         {
             InformationLog(message, string.Empty, string.Empty);
         }
 
 
-        public void ErrorLog(string exMessage,string exceptionDetail,string user)
+        public void ErrorLog(string exMessage, string action, string exceptionDetail,string user)
         {
             _logger.LogError(exMessage, exceptionDetail);
-            var error = new ErrorLog { Message = exMessage,Detail = exceptionDetail, Hostname = _remote.GetHostname(), IP = _remote.GetIp(), LogType = "Error", UserName = user };
+            var error = new ErrorLog { Message = exMessage,Detail = exceptionDetail, Hostname = _remote.GetHostname(), IP = _remote.GetIp(), LogType = "Error", UserName = user,ActionTrigered = action };
             _repoError.Add(error);
             _repoError.SaveChange();
         }
 
-        public void ErrorLog(string message, string exceptionDetail)
+        public void ErrorLog(string message, string action, string exceptionDetail)
         {
-            ErrorLog(message, exceptionDetail, string.Empty);
+            ErrorLog(message, action, exceptionDetail, string.Empty);
         }
 
-        public void ErrorLog(string message)
+        public void ErrorLog(string message, string action)
         {
-            ErrorLog(message, string.Empty, string.Empty);
+            ErrorLog(message,action, string.Empty, string.Empty);
         }
     }
 }
