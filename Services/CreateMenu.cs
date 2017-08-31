@@ -15,13 +15,15 @@ namespace Itsomax.Module.Core.Services
         private readonly IRepository<Modules> _module;
         private readonly IManageFiles _manageFile;
         private readonly IRepository<SubModule> _subModule;
-        public CreateMenu(IRepository<ModuleContent> moduleContent,IRepository<Modules> module,
+        private readonly IRepository<AppSetting> _appSettings;
+        public CreateMenu(IRepository<ModuleContent> moduleContent,IRepository<Modules> module, IRepository<AppSetting> appSettings,
                           IManageFiles manageFile,IRepository<SubModule> subModule)
         {
             _module = module;
             _moduleContent = moduleContent;
             _manageFile = manageFile;
             _subModule = subModule;
+            _appSettings = appSettings;
         }
 
         public void CreteMenuFile()
@@ -32,7 +34,7 @@ namespace Itsomax.Module.Core.Services
             var modules = _module.Query().Where(x => x.isValid==true && x.ShortName.Contains("Management")).ToList();
             
 
-            string sidebarMenu = "";//"<li class=\"header\">MAIN NAVIGATION</li>";
+            string sidebarMenu = "";
 
             foreach (var itemMod in modules)
             {
@@ -40,7 +42,7 @@ namespace Itsomax.Module.Core.Services
                 sidebarMenu = sidebarMenu +
                     "@if ((User.HasClaim(c => c.Value.ToString()==\"HasAccess\" && (c.Type.Contains(\"User\") || c.Type.Contains(\"Role\"))) || User.IsInRole(\"Admin\")))" + Environment.NewLine +
                     "{" + Environment.NewLine +
-                    "<li class=\"header\">" + StringHelperClass.CamelSplit(itemMod.ShortName).ToUpper() + "</li>" + Environment.NewLine +
+                    "<li class=\"nav-small-cap\">" + StringHelperClass.CamelSplit(itemMod.ShortName).ToUpper() + "</li>" + Environment.NewLine +
                     "}"+Environment.NewLine;
                 var subModules = _subModule.Query().Where(x => x.ModulesId==itemMod.Id).ToList();
                 foreach (var itemSubMod in subModules)
@@ -48,37 +50,35 @@ namespace Itsomax.Module.Core.Services
 					sidebarMenu = sidebarMenu +
                     "@if ((User.HasClaim(c => c.Value.ToString()==\"HasAccess\" && (c.Type.Contains(\""+itemSubMod.Name+"\"))) || User.IsInRole(\"Admin\")))" + Environment.NewLine +
                     "{" + Environment.NewLine +
-                    "<li class=\"treeview\">" + Environment.NewLine+
+                    "<li>" + Environment.NewLine+
 
-                    "<a href =\"#\">" + Environment.NewLine+
-                    "<i class=\"fa fa-dashboard\"></i> <span>" + StringHelperClass.CamelSplit(itemSubMod.Name) + "</span>" + Environment.NewLine+
+                    "<a href =\"#\" class=\"has-arrow waves-effect waves-dark\" aria-expanded=\"false\">" + Environment.NewLine+
+                    "<i class=\"mdi mdi-gauge\"></i> <span class=\"hide-menu\">" + StringHelperClass.CamelSplit(itemSubMod.Name) + "</span>" + Environment.NewLine+
 
-                    "<span class=\"pull-right-container\">" + Environment.NewLine+
+                    //"<span class=\"pull-right-container\">" + Environment.NewLine+
 
-                    "<i class=\"fa fa-angle-left pull-right\"></i>" + Environment.NewLine+
+                    //"<i class=\"fa fa-angle-left pull-right\"></i>" + Environment.NewLine+
 
-                    "</span>" + Environment.NewLine +
+                    //"</span>" + Environment.NewLine +
                     "</a>" + Environment.NewLine +
-                    "<ul class=\"treeview-menu\">" + Environment.NewLine;
+                    "<ul aria-expanded=\"false\" class=\"collapse\">" + Environment.NewLine;
                     var modContent = _moduleContent.Query().Where(x => x.ModulesId == itemMod.Id && !x.Action.ToUpper().Contains("VIEW") && x.Controller == itemSubMod.Name).ToList();
 					foreach (var itemCon in modContent)
 					{
 						sidebarMenu = sidebarMenu +
-						"<li><a href=\"/" + itemCon.Controller + "/" + itemCon.Action + "\"><i class=\"fa fa-circle-o\"></i>" + StringHelperClass.CamelSplit(itemCon.Action) + "</a></li>"+ Environment.NewLine;
+						"<li><a href=\"/" + itemCon.Controller + "/" + itemCon.Action + "\">" + StringHelperClass.CamelSplit(itemCon.Action) + "</a></li>"+ Environment.NewLine;
 					}
                     sidebarMenu = sidebarMenu +
                         "</ul>" + Environment.NewLine +
                         "</li>" + Environment.NewLine +
                         "}" + Environment.NewLine;
                 }
+
     
             }
-            var content = _manageFile.GetFileContent(filePath, file);
-            if(content!=sidebarMenu)
-            {
-                _manageFile.EditFile(filePath, sidebarMenu, file);
-            }
-            
+            var appSettings = _appSettings.Query().FirstOrDefault(x => x.Key == "NewModuleCreateMenu");
+            appSettings.Value = "false";
+            _appSettings.SaveChange();
         }
     }
 }

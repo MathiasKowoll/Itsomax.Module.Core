@@ -12,7 +12,7 @@ namespace Itsomax.Module.Core.Models
 {
     public static class SeedInitialdata
     {
-        private static readonly string[] AppSettingsListBool = new string[] { "SeedData", "NewModule", "CreateAdmin", "RefreshClaims" };
+        private static readonly string[] AppSettingsListBool = new string[] { "SeedData", "NewModule", "CreateAdmin", "RefreshClaims", "NewModuleCreateMenu" };
         private static readonly string[] AppSettingsListEmpty = new string[] {"SmptUrl", "SmptAccount", "SmptPassword" };
 
         public static async Task CreateDB(IServiceProvider serviceProvider)
@@ -210,6 +210,10 @@ namespace Itsomax.Module.Core.Models
                 var newModule = context.AppSettings.FirstOrDefault(x => x.Key == "NewModule");
                 newModule.Value = "false";
                 context.Entry(newModule).State= EntityState.Modified;
+                context.SaveChanges();
+                var newMenu = context.AppSettings.FirstOrDefault(x => x.Key == "NewModuleCreateMenu");
+                newMenu.Value = "true";
+                context.Entry(newMenu).State = EntityState.Modified;
                 context.SaveChanges();
 
             }

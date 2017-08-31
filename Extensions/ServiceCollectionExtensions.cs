@@ -23,6 +23,7 @@ using NToastNotify;
 using Itsomax.Data.Infrastructure.Web.ModelBinders;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 //using Hangfire;
 
 namespace Itsomax.Module.Core.Extensions
@@ -128,10 +129,11 @@ namespace Itsomax.Module.Core.Extensions
                 o.Lockout.MaxFailedAccessAttempts = Convert.ToInt32(configuration.GetSection("ConfigSystem:MaxFailedAccessAttempts").Value);
                 o.Lockout.DefaultLockoutTimeSpan = System.TimeSpan.FromDays(Convert.ToInt32(configuration.GetSection("ConfigSystem:DefaultLockoutTimeSpanDays").Value));
 
+
             })
+            .AddDefaultTokenProviders()
             .AddRoleStore<ItsomaxRoleStore>()
             .AddUserStore<ItsomaxUserStore>();
-                //.AddDefaultTokenProviders();
                 services.ConfigureApplicationCookie(o =>
                 {
                     o.LoginPath = Convert.ToString(configuration.GetSection("ConfigSystem:LoginPath").Value);
