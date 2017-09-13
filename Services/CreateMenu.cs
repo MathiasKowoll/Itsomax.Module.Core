@@ -30,6 +30,58 @@ namespace Itsomax.Module.Core.Services
         {
             var filePath = Path.Combine(GlobalConfiguration.ContentRootPath, "Views", "Shared");
             var file = "_AdminSideMenu.cshtml";
+            var modules = _module.Query().Where(x => x.isValid == true && x.ShortName.Contains("Management")).ToList();
+            var countModules = modules.Count();
+            string sidebarMenu = "";
+
+            var count = 1;
+            while (count <= countModules)
+            {
+                foreach (var itemMod in modules)
+                {
+                    var checkFile = count.ToString() + "_" + itemMod.ShortName + "SideMenu.cshtml";
+                    if (_manageFile.ExistFile(filePath, checkFile))
+                    {
+                        sidebarMenu = sidebarMenu + "@await Html.PartialAsync(\"" + checkFile + "\")" + Environment.NewLine;
+                    }
+                }
+                count++;
+            }
+            _manageFile.EditFile(filePath, sidebarMenu, file);
+            var appSettings = _appSettings.Query().FirstOrDefault(x => x.Key == "NewModuleCreateMenu");
+            appSettings.Value = "false";
+            _appSettings.SaveChange();
+
+
+
+            /*
+            foreach (var itemMod in modules)
+            {
+                var count = 1;
+                while (count <= countModules)
+                {
+                    var checkFile = count.ToString()+"_"+ itemMod.ShortName + "SideMenu.cshtml";
+                    var exist = _manageFile.ExistFile(filePath, checkFile);
+                    if(_manageFile.ExistFile(filePath, checkFile))
+                    {
+                        sidebarMenu = sidebarMenu + "@await Html.PartialAsync(\"" + checkFile + "\")"+ Environment.NewLine;
+                    }
+                    count++;
+                }
+            }
+            _manageFile.EditFile(filePath, sidebarMenu, file);
+            var appSettings = _appSettings.Query().FirstOrDefault(x => x.Key == "NewModuleCreateMenu");
+            appSettings.Value = "false";
+            _appSettings.SaveChange();
+            */
+
+        }
+
+        /*
+        public void CreteMenuFile()
+        {
+            var filePath = Path.Combine(GlobalConfiguration.ContentRootPath, "Views", "Shared");
+            var file = "_AdminSideMenu.cshtml";
 
             var modules = _module.Query().Where(x => x.isValid==true && x.ShortName.Contains("Management")).ToList();
             
@@ -76,9 +128,11 @@ namespace Itsomax.Module.Core.Services
 
     
             }
+            _manageFile.EditFile(filePath, sidebarMenu, file);
             var appSettings = _appSettings.Query().FirstOrDefault(x => x.Key == "NewModuleCreateMenu");
             appSettings.Value = "false";
             _appSettings.SaveChange();
         }
+        */
     }
 }

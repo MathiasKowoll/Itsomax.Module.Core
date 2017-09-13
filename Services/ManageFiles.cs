@@ -55,5 +55,29 @@ namespace Itsomax.Module.Core.Services
             return content;
 
         }
+        public bool ExistFile(string Path, string FileName)
+        {
+            var file = "";
+            if(Environment.OSVersion.VersionString.Contains("Windows"))
+            {
+                file = Path + "\\" + FileName;
+            }
+            else
+            {
+                file = Path + "/" + FileName;
+            }
+
+            try
+            {
+                FileStream fileStream = new FileStream(file, FileMode.Open);
+                fileStream.Dispose();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
     }
 }
