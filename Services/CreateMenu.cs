@@ -42,7 +42,7 @@ namespace Itsomax.Module.Core.Services
                     var checkFile = count.ToString() + "_" + itemMod.ShortName + "SideMenu.cshtml";
                     if (_manageFile.ExistFile(filePath, checkFile))
                     {
-                        sidebarMenu = sidebarMenu + "@await Html.PartialAsync(\"" + checkFile + "\")" + Environment.NewLine;
+                        sidebarMenu = sidebarMenu + "@await Html.PartialAsync(\"" + checkFile + "\")" + Environment.NewLine+ "<hr class=\"m-t-0 m-b-40\">" + Environment.NewLine;
                     }
                 }
                 count++;

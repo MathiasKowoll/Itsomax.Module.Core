@@ -274,5 +274,13 @@ namespace Itsomax.Module.Core.Models
             }
 
         }
+        public static void LoadInitialScript(IServiceProvider serviceProvider)
+        {
+            using (var context = new ItsomaxDbContext(
+                serviceProvider.GetRequiredService<DbContextOptions<ItsomaxDbContext>>()))
+            {
+                //context.Database
+            }
+        }
     }
 }

@@ -1,6 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Mathias Kowoll</Authors>
+    <Company>IT-SOMAX</Company>
+    <Description>Core module to build apps with Itsomax.AppHost.</Description>
+    <Copyright>Mathias Kowoll, IT-SOMAX @2017</Copyright>
+    <PackageLicenseUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Hangfire" Version="1.6.17" />
@@ -16,9 +24,7 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
     <PackageReference Include="NToastNotify " Version="3.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\Itsomax.Data.Infrastructure\Itsomax.Data.Infrastructure.csproj" />
+    <PackageReference Include="Itsomax.Data.Infrastructure" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="NToastNotify" Version="3.0.2" />
