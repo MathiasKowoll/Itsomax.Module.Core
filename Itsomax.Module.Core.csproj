@@ -9,6 +9,7 @@
     <PackageLicenseUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core/blob/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</RepositoryUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Hangfire" Version="1.6.17" />
@@ -23,10 +24,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
-    <PackageReference Include="NToastNotify " Version="3.0.0" />
+    <PackageReference Include="NToastNotify " Version="3.0.2" />
     <PackageReference Include="Itsomax.Data.Infrastructure" Version="1.0.2" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="NToastNotify" Version="3.0.2" />
   </ItemGroup>
 </Project>
