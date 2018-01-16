@@ -274,6 +274,19 @@ namespace Itsomax.Module.Core.Models
             }
 
         }
+
+        public static async Task CreatePythonExtentionPostgres(IServiceProvider serviceProvider)
+        {
+            
+            using (var context = new ItsomaxDbContext(
+                serviceProvider.GetRequiredService<DbContextOptions<ItsomaxDbContext>>()))
+            {
+                if (context.Database.GetPendingMigrations().Any())
+                    await context.Database.ExecuteSqlCommandAsync(" CREATE EXTENSION plpythonu");
+                return;
+            }
+        }
+
         public static void LoadInitialScript(IServiceProvider serviceProvider)
         {
             using (var context = new ItsomaxDbContext(
