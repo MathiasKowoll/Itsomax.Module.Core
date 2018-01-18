@@ -23,7 +23,34 @@ namespace Itsomax.Module.Core.Models
                 if(context.Database.GetPendingMigrations().Any())
                 {
                     await context.Database.MigrateAsync();
-                    await context.Database.ExecuteSqlCommandAsync(" CREATE EXTENSION plpythonu");
+                }
+            }
+        }
+
+        public static async Task CreateExtention(IServiceProvider serviceProvider)
+        {
+            using (var context = new ItsomaxDbContext(
+                serviceProvider.GetRequiredService<DbContextOptions<ItsomaxDbContext>>()))
+            {
+                using (var command = context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = "SELECT * FROM pg_available_extensions where name like 'plpython2u' and installed_version is null";
+                    await context.Database.OpenConnectionAsync();
+
+                    using (var result =  command.ExecuteReaderAsync().Result)
+                    {
+                        if (result.HasRows)
+                        {
+                            context.Database.CloseConnection();
+                            await context.Database.ExecuteSqlCommandAsync("CREATE EXTENSION plpython2u");
+                        }
+                        else
+                        {
+                            context.Database.CloseConnection();
+                            return;
+                        }
+                            
+                    }
                 }
             }
         }

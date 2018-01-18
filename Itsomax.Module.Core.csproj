@@ -9,8 +9,8 @@
     <PackageLicenseUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core/blob/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</RepositoryUrl>
-    <Version>1.0.5</Version>
-    <PackageReleaseNotes>Fix extention creation</PackageReleaseNotes>
+    <Version>1.0.6</Version>
+    <PackageReleaseNotes>Fix postgres connection error, added some validations if sql server is used</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Update="Microsoft.NETCore.App" Version="2.0.5" />
