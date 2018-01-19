@@ -47,12 +47,31 @@ namespace Itsomax.Module.Core.Models
                         else
                         {
                             context.Database.CloseConnection();
-                            return;
                         }
                             
                     }
                 }
+
+                using (var command = context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = "SELECT * FROM pg_available_extensions where name like 'pgcrypto' and installed_version is null";
+                    await context.Database.OpenConnectionAsync();
+
+                    using (var result = command.ExecuteReaderAsync().Result)
+                    {
+                        if (result.HasRows)
+                        {
+                            context.Database.CloseConnection();
+                            await context.Database.ExecuteSqlCommandAsync("CREATE EXTENSION pgcrypto");
+                        }
+                        else
+                        {
+                            context.Database.CloseConnection();
+                        }
+                    }
+                }
             }
+            return;
         }
 
         public static void InitialAppSettings(IServiceProvider serviceProvider)
