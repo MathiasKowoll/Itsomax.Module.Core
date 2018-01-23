@@ -41,6 +41,7 @@ namespace Itsomax.Module.Core.Data
             base.OnModelCreating(modelBuilder);
 
             RegisterCustomMappings(modelBuilder, typeToRegisters);
+
         }
 
         private static void RegisterConvention(ModelBuilder modelBuilder)
