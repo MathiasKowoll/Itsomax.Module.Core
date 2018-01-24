@@ -5,11 +5,11 @@
     <Authors>Mathias Kowoll</Authors>
     <Company>IT-SOMAX</Company>
     <Description>Core module to build apps with Itsomax.AppHost.</Description>
-    <Copyright>Mathias Kowoll, IT-SOMAX @2017</Copyright>
+    <Copyright>Mathias Kowoll, IT-SOMAX @2018</Copyright>
     <PackageLicenseUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core/blob/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</RepositoryUrl>
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
     <PackageReleaseNotes>added extention on postgres DB.</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
