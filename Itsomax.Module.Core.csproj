@@ -9,8 +9,8 @@
     <PackageLicenseUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core/blob/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</RepositoryUrl>
-    <Version>1.0.8</Version>
-    <PackageReleaseNotes>added extention on postgres DB.</PackageReleaseNotes>
+    <Version>1.0.9</Version>
+    <PackageReleaseNotes>clean dynamic menu before inserting new package</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Update="Microsoft.NETCore.App" Version="2.0.5" />
@@ -26,7 +26,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.0.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.4.2" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
-    <PackageReference Include="NToastNotify" Version="3.0.2" />
+    <PackageReference Include="NToastNotify" Version="3.0.3" />
     <PackageReference Include="Itsomax.Data.Infrastructure" Version="1.0.4" />
   </ItemGroup>
 </Project>

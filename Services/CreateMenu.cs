@@ -34,6 +34,8 @@ namespace Itsomax.Module.Core.Services
             var countModules = modules.Count();
             string sidebarMenu = "";
 
+            _manageFile.CleanFile(filePath,file);
+
             var count = 1;
             while (count <= countModules)
             {
