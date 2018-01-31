@@ -7,7 +7,7 @@ namespace Itsomax.Module.Core.Models
     {
         public string Name { get; set; }
 
-        public bool isValid { get; set; }
+        public bool IsValidModule { get; set; }
 
         public string ShortName { get; set; }
         public string Path { get; set; }

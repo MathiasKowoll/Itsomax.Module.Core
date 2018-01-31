@@ -1,26 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Net.Http.Headers;
-using Itsomax.Data.Infrastructure;
-//using Itsomax.Module.Core.Extensions;
-using Microsoft.Extensions.DependencyInjection;
-using Itsomax.Module.Core.Data;
-using Itsomax.Module.Core.Models;
-//using Itsomax.Module.Web.Models;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
-//using Hangfire;
 
-//using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
-using Microsoft.AspNetCore.Identity;
 
 namespace Itsomax.Module.Core.Extensions
 {

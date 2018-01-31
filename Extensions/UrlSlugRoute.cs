@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Itsomax.Data.Infrastructure.Data;
 using Itsomax.Module.Core.Models;
-using System;
-using System.Collections.Generic;
 
 namespace Itsomax.Module.Core.Extensions
 {

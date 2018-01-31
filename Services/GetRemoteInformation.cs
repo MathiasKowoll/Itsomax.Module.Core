@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Itsomax.Module.Core.Interfaces;
+﻿using Itsomax.Module.Core.Interfaces;
+using Microsoft.AspNetCore.Http;
 
-namespace Itsomax.Module.Core.Extensions
+namespace Itsomax.Module.Core.Services
 {
     public class GetRemoteInformation : IGetRemoteInformation
     {

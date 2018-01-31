@@ -9,20 +9,20 @@ namespace Itsomax.Module.Core.Extensions
 		{
 			Instance = new RequestPath(null);
 		}
-		private readonly IHttpContextAccessor contextAccessor;
+		private readonly IHttpContextAccessor _contextAccessor;
 
 		public RequestPath(IHttpContextAccessor contextAccessor)
 		{
-			this.contextAccessor = contextAccessor;
+			_contextAccessor = contextAccessor;
 		}
 
 		public HttpContext CurrentContext
 		{
 			get
 			{
-			if (contextAccessor == null)
+			if (_contextAccessor == null)
 				return null;
-			return contextAccessor.HttpContext;
+			return _contextAccessor.HttpContext;
 			}
 		}
 	}

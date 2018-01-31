@@ -7,9 +7,7 @@ using System.Runtime.Loader;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using MediatR;
-using Dapper;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,8 +16,6 @@ using Itsomax.Data.Infrastructure;
 using Itsomax.Data.Infrastructure.Data;
 using Itsomax.Module.Core.Data;
 using Itsomax.Module.Core.Models;
-using Microsoft.AspNetCore.Authorization;
-using NToastNotify;
 using Itsomax.Data.Infrastructure.Web.ModelBinders;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -127,7 +123,7 @@ namespace Itsomax.Module.Core.Extensions
                 o.Password.RequireUppercase = Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireUppercase").Value);
                 o.Lockout.AllowedForNewUsers = Convert.ToBoolean(configuration.GetSection("ConfigSystem:AllowedForNewUsers").Value);
                 o.Lockout.MaxFailedAccessAttempts = Convert.ToInt32(configuration.GetSection("ConfigSystem:MaxFailedAccessAttempts").Value);
-                o.Lockout.DefaultLockoutTimeSpan = System.TimeSpan.FromDays(Convert.ToInt32(configuration.GetSection("ConfigSystem:DefaultLockoutTimeSpanDays").Value));
+                o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(Convert.ToInt32(configuration.GetSection("ConfigSystem:DefaultLockoutTimeSpanDays").Value));
 
 
             })
@@ -138,7 +134,7 @@ namespace Itsomax.Module.Core.Extensions
                 {
                     o.LoginPath = Convert.ToString(configuration.GetSection("ConfigSystem:LoginPath").Value);
                     o.LogoutPath = Convert.ToString(configuration.GetSection("ConfigSystem:LogoutPath").Value);
-                    o.ExpireTimeSpan = System.TimeSpan.FromMinutes(Convert.ToInt32(configuration.GetSection("ConfigSystem:CookieExpireTimeSpanMin").Value));
+                    o.ExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToInt32(configuration.GetSection("ConfigSystem:CookieExpireTimeSpanMin").Value));
                     o.AccessDeniedPath = Convert.ToString(configuration.GetSection("ConfigSystem:AccessDeniedPath").Value);
                 });
 

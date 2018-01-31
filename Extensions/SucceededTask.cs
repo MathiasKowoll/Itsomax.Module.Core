@@ -2,10 +2,10 @@ namespace Itsomax.Module.Core.Extensions
 {
     public class SucceededTask
     {
-        private static readonly SucceededTask _success = new SucceededTask { Succeeded = true };
-        private static readonly SucceededTask _lockedOut = new SucceededTask { IsLockedOut = true };
-        private static readonly SucceededTask _notAllowed = new SucceededTask { IsNotAllowed = true };
-        private static readonly SucceededTask _userExists = new SucceededTask { IsUserExists = true };
+        private static readonly SucceededTask SuccessTask = new SucceededTask { Succeeded = true };
+        private static readonly SucceededTask LockedOutTask = new SucceededTask { IsLockedOut = true };
+        private static readonly SucceededTask NotAllowedTask = new SucceededTask { IsNotAllowed = true };
+        private static readonly SucceededTask UserExistsTask = new SucceededTask { IsUserExists = true };
         //private List<ErrorTask> _errors = new List<ErrorTask>();
         private string _errors;
         //public IEnumerable<ErrorTask> Errors => _errors;
@@ -14,11 +14,11 @@ namespace Itsomax.Module.Core.Extensions
         public bool IsNotAllowed { get; protected set; }
         public bool IsUserExists { get; protected set; }
 
-        public static SucceededTask Success => _success;
+        public static SucceededTask Success => SuccessTask;
         public string Errors => _errors;
-        public static SucceededTask LockedOut => _lockedOut;
-        public static SucceededTask NotAllowed => _notAllowed;
-        public static SucceededTask UserExists => _userExists;
+        public static SucceededTask LockedOut => LockedOutTask;
+        public static SucceededTask NotAllowed => NotAllowedTask;
+        public static SucceededTask UserExists => UserExistsTask;
 
 
 

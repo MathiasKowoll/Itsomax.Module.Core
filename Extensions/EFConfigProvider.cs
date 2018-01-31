@@ -5,21 +5,21 @@ using Microsoft.Extensions.Configuration;
 
 namespace Itsomax.Module.Core.Extensions
 {
-    public class EFConfigProvider : ConfigurationProvider
+    public class EfConfigProvider : ConfigurationProvider
     {
         private Action<DbContextOptionsBuilder> OptionsAction { get; }
 
-        public EFConfigProvider(Action<DbContextOptionsBuilder> optionsAction)
+        public EfConfigProvider(Action<DbContextOptionsBuilder> optionsAction)
         {
             OptionsAction = optionsAction;
         }
 
         public override void Load()
         {
-            var builder = new DbContextOptionsBuilder<EFConfigurationDbContext>();
+            var builder = new DbContextOptionsBuilder<EfConfigurationDbContext>();
             OptionsAction(builder);
 
-            using (var dbContext = new EFConfigurationDbContext(builder.Options))
+            using (var dbContext = new EfConfigurationDbContext(builder.Options))
             {
                 Data = dbContext.AppSettings.ToDictionary(c => c.Key, c => c.Value);
             }

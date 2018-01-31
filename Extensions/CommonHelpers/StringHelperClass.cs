@@ -5,16 +5,16 @@ namespace Itsomax.Module.Core.Extensions.CommonHelpers
 {
     public  class StringHelperClass
     {
-        public static string CamelSplit(string Word)
+        public static string CamelSplit(string word)
         {
             StringBuilder builder = new StringBuilder();
-            foreach (char c in Word)
+            foreach (char c in word)
             {
                 if (Char.IsUpper(c) && builder.Length > 0) builder.Append(' ');
                 builder.Append(c);
             }
-            Word = builder.ToString();
-            return Word;
+            word = builder.ToString();
+            return word;
         }
     }
 }

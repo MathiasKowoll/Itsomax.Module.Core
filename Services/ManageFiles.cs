@@ -1,37 +1,36 @@
 using System;
 using System.IO;
-using System.IO.Compression;
 using Itsomax.Module.Core.Interfaces;
 
 namespace Itsomax.Module.Core.Services
 {
     public class ManageFiles : IManageFiles
     {
-        public string CreateFile(string Path, string FileName, string Extention)
+        public string CreateFile(string path, string fileName, string extention)
         {
-            if (Path == null)
+            if (path == null)
             {
                 return null;
             }
 
-            var file = Path + "/" + FileName+"."+Extention;
+            var file = path + "/" + fileName+"."+extention;
             FileStream fileStream = new FileStream(file, FileMode.Create);
             return file;
 
         }
-        public void EditFile(string Path, string Content, string FileName)
+        public void EditFile(string path, string content, string fileName)
         {
-            var file = Path + "/" + FileName;
-            CleanFile(Path,FileName);
+            var file = path + "/" + fileName;
+            CleanFile(path,fileName);
             using (StreamWriter writer = new StreamWriter(File.OpenWrite(file)))
             {
-                writer.WriteLine(Content);
+                writer.WriteLine(content);
                 writer.Dispose();
             }
         }
-        public  void CleanFile(string Path, string FileName)
+        public  void CleanFile(string path, string fileName)
         {
-            var file = Path + "/" + FileName;
+            var file = path + "/" + fileName;
             FileStream fileStream = new FileStream(file, FileMode.Truncate);
             fileStream.Dispose();
         }
@@ -43,10 +42,10 @@ namespace Itsomax.Module.Core.Services
                 file.Delete();
             }
         }
-        public string GetFileContent(string Path, string FileName)
+        public string GetFileContent(string path, string fileName)
         {
-            var file = Path + "/" + FileName;
-            string content = null;
+            var file = path + "/" + fileName;
+            string content;
             using (StreamReader reader = new StreamReader(File.OpenRead(file)))
             {
                 content = reader.ReadToEnd();
@@ -55,16 +54,16 @@ namespace Itsomax.Module.Core.Services
             return content;
 
         }
-        public bool ExistFile(string Path, string FileName)
+        public bool ExistFile(string path, string fileName)
         {
-            var file = "";
+            string file;
             if(Environment.OSVersion.VersionString.Contains("Windows"))
             {
-                file = Path + "\\" + FileName;
+                file = path + "\\" + fileName;
             }
             else
             {
-                file = Path + "/" + FileName;
+                file = path + "/" + fileName;
             }
 
             try

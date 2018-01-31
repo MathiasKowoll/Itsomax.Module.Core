@@ -9,8 +9,8 @@
     <PackageLicenseUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core/blob/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</RepositoryUrl>
-    <Version>1.0.9</Version>
-    <PackageReleaseNotes>clean dynamic menu before inserting new package</PackageReleaseNotes>
+    <Version>1.0.10</Version>
+    <PackageReleaseNotes>Refactoring and cleaning code</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Update="Microsoft.NETCore.App" Version="2.0.5" />

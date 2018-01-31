@@ -15,7 +15,7 @@ namespace Itsomax.Module.Core.Models
         private static readonly string[] AppSettingsListBool = new string[] { "SeedData", "NewModule", "CreateAdmin", "RefreshClaims", "NewModuleCreateMenu" };
         private static readonly string[] AppSettingsListEmpty = new string[] {"SmptUrl", "SmptAccount", "SmptPassword" };
 
-        public static async Task CreateDB(IServiceProvider serviceProvider)
+        public static async Task CreateDb(IServiceProvider serviceProvider)
         {
             using (var context = new ItsomaxDbContext (
                 serviceProvider.GetRequiredService<DbContextOptions<ItsomaxDbContext>>()))
@@ -71,7 +71,6 @@ namespace Itsomax.Module.Core.Models
                     }
                 }
             }
-            return;
         }
 
         public static void InitialAppSettings(IServiceProvider serviceProvider)
@@ -112,15 +111,15 @@ namespace Itsomax.Module.Core.Models
                     return;
                 }
 
-                var modulesDB = context.Modules.ToList();
-                foreach (var item in modulesDB)
+                var modulesDb = context.Modules.ToList();
+                foreach (var item in modulesDb)
                 {
 
                     var existModuleGlobal = GlobalConfiguration.Modules.FirstOrDefault(x => x.Name == item.Name);
                     if (existModuleGlobal == null)
                     {
                         var moduleDelete = context.Modules.FirstOrDefault(x => x.Id == item.Id);
-                        context.Modules.Remove(moduleDelete);
+                        if (moduleDelete != null) context.Modules.Remove(moduleDelete);
                         context.SaveChanges();
                     }
                 }
@@ -139,6 +138,8 @@ namespace Itsomax.Module.Core.Models
 
                     var modules = context.Modules.FirstOrDefault(z => z.Name == moduleConfig.Name);
 
+                    var modConfigs = modelContent as ModuleContent[] ?? modelContent.ToArray();
+                    var moduleContents = modelContent as ModuleContent[] ?? modConfigs.ToArray();
                     if (modules != null)
                     {
                         modules.Path = moduleConfig.Path;
@@ -146,20 +147,20 @@ namespace Itsomax.Module.Core.Models
                         context.Entry(modules).State = EntityState.Modified;
                         context.SaveChanges();
 
-                        var modContentDB = context.ModuleContent.Where(x => x.ModulesId == modules.Id).ToList();
-                        foreach (var item in modContentDB)
+                        var modContentDb = context.ModuleContent.Where(x => x.ModulesId == modules.Id).ToList();
+                        foreach (var item in modContentDb)
                         {
-                            var modContentAsm = modelContent.FirstOrDefault(x => x.Controller == item.Controller && x.Action == item.Action);
-                            if (modContentAsm == null)
+                            var modContentAsm = moduleContents.FirstOrDefault(x => x.Controller == item.Controller && x.Action == item.Action);
+                            if (modContentAsm != null) continue;
                             {
                                 var modContentDel = context.ModuleContent.FirstOrDefault(x => x.Id == item.Id);
-                                context.ModuleContent.Remove(modContentDel);
+                                if (modContentDel != null) context.ModuleContent.Remove(modContentDel);
                                 context.SaveChanges();
                             }
 
                         }
 
-                        foreach (var modConfig in modelContent)
+                        foreach (var modConfig in moduleContents)
                         {
                             var modContent = context.ModuleContent.FirstOrDefault(x => x.Controller == modConfig.Controller && x.Action == modConfig.Action);
                             if (modContent == null)
@@ -183,20 +184,6 @@ namespace Itsomax.Module.Core.Models
                                 context.SaveChanges();
                             }
                         }
-                        /*
-                        var subModDB = context.SubModule.ToList();
-                        foreach (var item in subModDB)
-                        {
-                            var testsubmodDll = modContentDB.Distinct().ToList();
-                            var submodDll = modContentDB.FirstOrDefault(x => x.Controller == item.Name);
-                            if (submodDll == null)
-                            {
-                                var sub = context.SubModule.FirstOrDefault(x => x.Id == item.Id);
-                                context.SubModule.Remove(sub);
-                                context.SaveChanges();
-                            }
-                        }
-                        */
 
                     }
                     else //If module does not exists in Database
@@ -206,12 +193,12 @@ namespace Itsomax.Module.Core.Models
                             Name = moduleConfig.Name,
                             ShortName = moduleConfig.ShortName,
                             Path = moduleConfig.Path,
-                            isValid = true
+                            IsValidModule = true
                         };
                         context.Modules.Add(modules);
                         context.SaveChanges();
 
-                        foreach (var modConfig in modelContent)
+                        foreach (var modConfig in modConfigs)
                         {
                             var moduleContentAdd = new ModuleContent()
                             {
@@ -226,15 +213,15 @@ namespace Itsomax.Module.Core.Models
                 }
 
                 var subModules = context.ModuleContent.Where(x => x.Controller.Contains("Manage")).Select(x => new { x.ModulesId, x.Controller }).Distinct().ToList();
-                var subModulesDB = context.SubModule.ToList();
+                var subModulesDb = context.SubModule.ToList();
 
-                foreach (var item in subModulesDB)
+                foreach (var item in subModulesDb)
                 {
                     var existDbNotinMod = subModules.FirstOrDefault(x => x.Controller == item.Name);
                     if (existDbNotinMod == null)
                     {
                         var subModRemove = context.SubModule.FirstOrDefault(x => x.Name == item.Name);
-                        context.SubModule.Remove(subModRemove);
+                        if (subModRemove != null) context.SubModule.Remove(subModRemove);
                         context.SaveChanges();
                     }
                 }
@@ -244,23 +231,36 @@ namespace Itsomax.Module.Core.Models
                     var newSubModule = subModulesAdd.FirstOrDefault(x => x.Name == item.Controller);
                     if (newSubModule == null)
                     {
-                        var subModAdd = new SubModule()
+                        var moduleId = subModules.FirstOrDefault(x => x.Controller == item.Controller);
+                        if (moduleId != null)
                         {
-                            ModulesId = subModules.FirstOrDefault(x => x.Controller == item.Controller).ModulesId,
-                            Name = item.Controller
-                        };
-                        context.SubModule.Add(subModAdd);
-                        context.SaveChanges();
+                            var subModAdd = new SubModule()
+                            {
+                                ModulesId = moduleId.ModulesId,
+                                Name = item.Controller
+                            };
+                            context.SubModule.Add(subModAdd);
+                            context.SaveChanges();
+                        }
+                        
                     }
                 }
 
                 var newModule = context.AppSettings.FirstOrDefault(x => x.Key == "NewModule");
-                newModule.Value = "false";
-                context.Entry(newModule).State= EntityState.Modified;
+                if (newModule != null)
+                {
+                    newModule.Value = "false";
+                    context.Entry(newModule).State = EntityState.Modified;
+                }
+
                 context.SaveChanges();
                 var newMenu = context.AppSettings.FirstOrDefault(x => x.Key == "NewModuleCreateMenu");
-                newMenu.Value = "true";
-                context.Entry(newMenu).State = EntityState.Modified;
+                if (newMenu != null)
+                {
+                    newMenu.Value = "true";
+                    context.Entry(newMenu).State = EntityState.Modified;
+                }
+
                 context.SaveChanges();
 
             }
@@ -300,10 +300,13 @@ namespace Itsomax.Module.Core.Models
                     {
                         await userManager.AddToRoleAsync(user, "Admin");
                         var createAdmin = context.AppSettings.FirstOrDefault(x => x.Key == "CreateAdmin");
-                        createAdmin.Value = "false";
-                        context.Entry(createAdmin).State = EntityState.Modified;
+                        if (createAdmin != null)
+                        {
+                            createAdmin.Value = "false";
+                            context.Entry(createAdmin).State = EntityState.Modified;
+                        }
+
                         context.SaveChanges();
-                        return;
                     }
 
                 }
@@ -312,15 +315,20 @@ namespace Itsomax.Module.Core.Models
                     var passwordToken = userManager.GeneratePasswordResetTokenAsync(userExist).Result;
                     await userManager.ResetPasswordAsync(userExist, passwordToken, "Admin123.,");
                     var createAdmin = context.AppSettings.FirstOrDefault(x => x.Key == "CreateAdmin");
-                    createAdmin.Value = "false";
-                    context.Entry(createAdmin).State = EntityState.Modified;
+                    if (createAdmin != null)
+                    {
+                        createAdmin.Value = "false";
+                        context.Entry(createAdmin).State = EntityState.Modified;
+                    }
+
                     context.SaveChanges();
-                    return;
                 }
 
             }
 
         }
+        //TODO: create loading scripts for modules.
+        /*
         public static void LoadInitialScript(IServiceProvider serviceProvider)
         {
             using (var context = new ItsomaxDbContext(
@@ -329,5 +337,6 @@ namespace Itsomax.Module.Core.Models
                 //context.Database
             }
         }
+        */
     }
 }

@@ -2,11 +2,11 @@ namespace Itsomax.Module.Core.Interfaces
 {
     public interface IManageFiles
     {
-        string CreateFile(string Path, string FileName,string Extention);
-        void EditFile(string Path, string Content,string FileName);
-        void CleanFile(string Path,string FileName);
+        string CreateFile(string path, string fileName,string extention);
+        void EditFile(string path, string content,string fileName);
+        void CleanFile(string path,string fileName);
         void EmptyDir(string dir);
-        string GetFileContent(string Path, string FileName);
-        bool ExistFile(string Path, string FileName);
+        string GetFileContent(string path, string fileName);
+        bool ExistFile(string path, string fileName);
     }
 }

@@ -3,9 +3,9 @@ using Itsomax.Module.Core.Models;
 
 namespace Itsomax.Module.Core.Extensions
 {
-    public class EFConfigurationDbContext : DbContext
+    public class EfConfigurationDbContext : DbContext
     {
-        public EFConfigurationDbContext(DbContextOptions options) : base(options)
+        public EfConfigurationDbContext(DbContextOptions options) : base(options)
         {
         }
 

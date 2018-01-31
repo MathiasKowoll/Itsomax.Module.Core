@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Itsomax.Data.Infrastructure.Models;
 
 namespace Itsomax.Module.Core.Models
