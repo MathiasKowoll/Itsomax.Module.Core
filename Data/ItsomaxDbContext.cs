@@ -51,8 +51,11 @@ namespace Itsomax.Module.Core.Data
                 if (entity.ClrType.Namespace != null)
                 {
                     var nameParts = entity.ClrType.Namespace.Split('.');
-                    var tableName = string.Concat(nameParts[2].Replace("Management",""), "_", entity.ClrType.Name);
-                    modelBuilder.Entity(entity.Name).ToTable(tableName);
+                    //var tableName = string.Concat(nameParts[2].Replace("Management","").Replace("System",""), "", entity.ClrType.Name);
+                    //var schemaName = tableName.Replace(entity.ClrType.Name, "");
+                    var schemaName = nameParts[2].Replace("Management", "").Replace("System", "");
+                    modelBuilder.Entity(entity.Name).ToTable(entity.ClrType.Name,schemaName);
+                    //modelBuilder.Entity(entity.Name).ToTable(tableName);
                 }
             }
         }

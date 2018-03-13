@@ -10,21 +10,21 @@ namespace Itsomax.Module.Core.Data
         public void Build(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
-                .ToTable("Core_User");
+                .ToTable("User","Core");
 
             modelBuilder.Entity<Role>()
-                .ToTable("Core_Role");
+                .ToTable("Role","Core");
 
             modelBuilder.Entity<IdentityUserClaim<long>>(b =>
             {
                 b.HasKey(uc => uc.Id);
-                b.ToTable("Core_UserClaim");
+                b.ToTable("UserClaim","Core");
             });
 
             modelBuilder.Entity<IdentityRoleClaim<long>>(b =>
             {
                 b.HasKey(rc => rc.Id);
-                b.ToTable("Core_RoleClaim");
+                b.ToTable("RoleClaim","Core");
             });
 
             modelBuilder.Entity<UserRole>(b =>
@@ -32,17 +32,17 @@ namespace Itsomax.Module.Core.Data
                 b.HasKey(ur => new { ur.UserId, ur.RoleId });
                 b.HasOne(ur => ur.Role).WithMany(x => x.Users).HasForeignKey(r => r.RoleId);
                 b.HasOne(ur => ur.User).WithMany(u => u.Roles).HasForeignKey(u => u.UserId);
-                b.ToTable("Core_UserRole");
+                b.ToTable("UserRole","Core");
             });
 
             modelBuilder.Entity<IdentityUserLogin<long>>(b =>
             {
-                b.ToTable("Core_UserLogin");
+                b.ToTable("UserLogin","Core");
             });
 
             modelBuilder.Entity<IdentityUserToken<long>>(b =>
             {
-                b.ToTable("Core_UserToken");
+                b.ToTable("UserToken","Core");
             });
 
             modelBuilder.Entity<Entity>(e =>

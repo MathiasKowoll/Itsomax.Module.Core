@@ -4,13 +4,13 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Mathias Kowoll</Authors>
     <Company>IT-SOMAX</Company>
-    <Description>Core module to build apps with Itsomax.AppHost.</Description>
+    <Description>Core module to build apps with Itsomax.AppHost</Description>
     <Copyright>Mathias Kowoll, IT-SOMAX @2018</Copyright>
     <PackageLicenseUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core/blob/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</RepositoryUrl>
-    <Version>1.0.10</Version>
-    <PackageReleaseNotes>Refactoring and cleaning code</PackageReleaseNotes>
+    <Version>1.0.11</Version>
+    <PackageReleaseNotes>Change from Module_Table into one schema to Module.Table (schema.table) format using Camel Case and removing from module name the words Management and System</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Update="Microsoft.NETCore.App" Version="2.0.5" />
@@ -20,9 +20,9 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.1" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />
-    <PackageReference Include="npgsql" Version="3.2.6" />
+    <PackageReference Include="npgsql" Version="3.2.7" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.0.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.4.2" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
