@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using Itsomax.Module.Core.Interfaces;
 
@@ -6,21 +5,22 @@ namespace Itsomax.Module.Core.Services
 {
     public class ManageFiles : IManageFiles
     {
-        public string CreateFile(string path, string fileName, string extention)
+        public string CreateFile(string path, string fileName)
         {
             if (path == null)
             {
                 return null;
             }
 
-            var file = path + "/" + fileName+"."+extention;
+            var file = Path.Combine(path, fileName);
+            //var file = path + "/" + fileName+"."+extention;
             FileStream fileStream = new FileStream(file, FileMode.Create);
             return file;
 
         }
         public void EditFile(string path, string content, string fileName)
         {
-            var file = path + "/" + fileName;
+            var file = Path.Combine(path, fileName);
             CleanFile(path,fileName);
             using (StreamWriter writer = new StreamWriter(File.OpenWrite(file)))
             {
@@ -30,7 +30,7 @@ namespace Itsomax.Module.Core.Services
         }
         public  void CleanFile(string path, string fileName)
         {
-            var file = path + "/" + fileName;
+            var file = Path.Combine(path, fileName);
             FileStream fileStream = new FileStream(file, FileMode.Truncate);
             fileStream.Dispose();
         }
@@ -44,7 +44,7 @@ namespace Itsomax.Module.Core.Services
         }
         public string GetFileContent(string path, string fileName)
         {
-            var file = path + "/" + fileName;
+            var file = Path.Combine(path, fileName);
             string content;
             using (StreamReader reader = new StreamReader(File.OpenRead(file)))
             {
@@ -56,16 +56,7 @@ namespace Itsomax.Module.Core.Services
         }
         public bool ExistFile(string path, string fileName)
         {
-            string file;
-            if(Environment.OSVersion.VersionString.Contains("Windows"))
-            {
-                file = path + "\\" + fileName;
-            }
-            else
-            {
-                file = path + "/" + fileName;
-            }
-
+            var file = Path.Combine(path, fileName);
             try
             {
                 FileStream fileStream = new FileStream(file, FileMode.Open);
