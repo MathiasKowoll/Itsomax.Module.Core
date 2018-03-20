@@ -25,7 +25,7 @@ namespace Itsomax.Module.Core.Services
             _logger.LogInformation(message, detail);
             var audit = new AuditLog { Message = message, Detail = detail, Hostname = _remote.GetHostname(), Ip = _remote.GetIp(), LogType = "Information", UserName = user,ActionTrigered=action };
             RepoAudit.Add(audit);
-            RepoAudit.SaveChange();
+            RepoAudit.SaveChanges();
         }
 
         public void InformationLog(string message, string action, string detail)
@@ -44,7 +44,7 @@ namespace Itsomax.Module.Core.Services
             _logger.LogError(exMessage, exceptionDetail);
             var error = new ErrorLog { Message = exMessage,Detail = exceptionDetail, Hostname = _remote.GetHostname(), Ip = _remote.GetIp(), LogType = "Error", UserName = user,ActionTrigered = action };
             RepoError.Add(error);
-            RepoError.SaveChange();
+            RepoError.SaveChanges();
         }
 
         public void ErrorLog(string message, string action, string exceptionDetail)

@@ -5,31 +5,18 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Itsomax.Module.Core.Extensions
 {
-	public class ManageAuthentification : AuthorizationHandler<ManageAuthentificationRequirement>,IAuthorizationRequirement
+	public class ManageAuthentificationHandler : AuthorizationHandler<ManageAuthentificationRequirement>
 	{
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public ManageAuthentification(IHttpContextAccessor contextAccessor)
+        public ManageAuthentificationHandler(IHttpContextAccessor contextAccessor)
 		{
             _contextAccessor = contextAccessor;
-
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ManageAuthentificationRequirement requirement)
 		{
 
-           // var path2 = RequestPath.Instance.CurrentContext.Request.Path.Value;
-            //var userName = context.User.Identity.Name;//ToString();
-            //var user = _userManager.FindByNameAsync(userName).Result;
-            //var userRoles = _userManager.GetRolesAsync(user);
-
-            //var user = _context.Users.FirstOrDefault(x => x.UserName == userName);
-            //var userRoles = _context.UserRoles.Where(x => x.UserId == user.Id).AsQueryable();
-            //var modRoles = _context.ModuleRole
-
-            //var path = RequestPath.Instance.CurrentContext.Request.Path.Value;
-
-            
 
             if (context.User.Identity.IsAuthenticated)
 			{

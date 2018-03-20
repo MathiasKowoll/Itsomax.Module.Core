@@ -4,6 +4,6 @@ namespace Itsomax.Module.Core.Extensions
 {
     public class ManageAuthentificationRequirement : IAuthorizationRequirement
     {
-        
+
     }
 }

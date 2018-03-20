@@ -47,7 +47,7 @@ namespace Itsomax.Module.Core.Services
             _manageFile.EditFile(filePath, sidebarMenu, file);
             var appSettings = _appSettings.Query().FirstOrDefault(x => x.Key == "NewModuleCreateMenu");
             if (appSettings != null) appSettings.Value = "false";
-            _appSettings.SaveChange();
+            _appSettings.SaveChanges();
 
         }
     }

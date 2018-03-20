@@ -20,6 +20,10 @@ using Itsomax.Data.Infrastructure.Web.ModelBinders;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
+using NToastNotify;
+
 //using Hangfire;
 
 namespace Itsomax.Module.Core.Extensions
@@ -69,6 +73,16 @@ namespace Itsomax.Module.Core.Extensions
                     }
                 }
             }
+
+            foreach (var module in modules)
+
+            {
+                var moduleInitializerType = module.Assembly.GetTypes().FirstOrDefault(x => typeof(IModuleInitializer).IsAssignableFrom(x));
+                if ((moduleInitializerType != null) && (moduleInitializerType != typeof(IModuleInitializer)))
+                {
+                    services.AddSingleton(typeof(IModuleInitializer), moduleInitializerType);
+                }
+            }
             
             GlobalConfiguration.Modules = modules;
             return services;
@@ -89,31 +103,21 @@ namespace Itsomax.Module.Core.Extensions
                     }
                 })
                 .AddViewLocalization()
-                .AddDataAnnotationsLocalization();
+                .AddDataAnnotationsLocalization()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddNToastNotify()
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
 
             foreach (var module in modules)
             {
-                // Register controller from modules
                 mvcBuilder.AddApplicationPart(module.Assembly);
-
-                // Register dependency in modules
-                var moduleInitializerType =
-                    module.Assembly.GetTypes().FirstOrDefault(x => typeof(IModuleInitializer).IsAssignableFrom(x));
-                if ((moduleInitializerType != null) && (moduleInitializerType != typeof(IModuleInitializer)))
-                {
-                    var moduleInitializer = (IModuleInitializer)Activator.CreateInstance(moduleInitializerType);
-                    moduleInitializer.Init(services);
-                }
             }
 
             return services;
         }
 
-        public static IServiceCollection AddCustomizedIdentity(this IServiceCollection services, IConfigurationRoot configuration)
+        public static IServiceCollection AddCustomizedIdentity(this IServiceCollection services, IConfiguration configuration)
         {
-            //var configSystem = configuration.GetSection("UseSystem:DefaultApp").Value;
-            //if(configSystem=="ItsomaxCMS")
-            //{
             services.AddIdentity<User, Role>(o =>
             {
                 o.Password.RequireDigit = Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireDigit").Value);
@@ -130,18 +134,18 @@ namespace Itsomax.Module.Core.Extensions
             .AddDefaultTokenProviders()
             .AddRoleStore<ItsomaxRoleStore>()
             .AddUserStore<ItsomaxUserStore>();
-                services.ConfigureApplicationCookie(o =>
-                {
-                    o.LoginPath = Convert.ToString(configuration.GetSection("ConfigSystem:LoginPath").Value);
-                    o.LogoutPath = Convert.ToString(configuration.GetSection("ConfigSystem:LogoutPath").Value);
-                    o.ExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToInt32(configuration.GetSection("ConfigSystem:CookieExpireTimeSpanMin").Value));
-                    o.AccessDeniedPath = Convert.ToString(configuration.GetSection("ConfigSystem:AccessDeniedPath").Value);
-                });
+            services.ConfigureApplicationCookie(o =>
+            {
+                o.LoginPath = Convert.ToString(configuration.GetSection("ConfigSystem:LoginPath").Value);
+                o.LogoutPath = Convert.ToString(configuration.GetSection("ConfigSystem:LogoutPath").Value);
+                o.ExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToInt32(configuration.GetSection("ConfigSystem:CookieExpireTimeSpanMin").Value));
+                o.AccessDeniedPath = Convert.ToString(configuration.GetSection("ConfigSystem:AccessDeniedPath").Value);
+            });
 
             return services;
         }
  
-        public static IServiceCollection AddCustomizedDataStore(this IServiceCollection services, IConfigurationRoot configuration)
+        public static IServiceCollection AddCustomizedDataStore(this IServiceCollection services, IConfiguration configuration)
         {
 			var configDb = configuration.GetSection("UseConnection:DefaultConnection").Value;
             
@@ -158,27 +162,11 @@ namespace Itsomax.Module.Core.Extensions
 				    b => b.MigrationsAssembly("Itsomax.AppHost")));
 				
 			}
-			return services;
-            
-            
+			return services;   
         }
-        
-		public static IServiceCollection AddCustomizedAuthorization(this IServiceCollection services)
-		{
-			services.AddAuthorization(options =>
-			{
-				options.AddPolicy("ManageAuthentification",
-				                  policy => policy.Requirements.Add(new ManageAuthentificationRequirement()));
-			});
-			                          
-
-			return services;
-		}
-        
-
 
         public static IServiceProvider Build(this IServiceCollection services,
-            IConfigurationRoot configuration, IHostingEnvironment hostingEnvironment)
+            IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             var builder = new ContainerBuilder();
             builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>));
@@ -200,7 +188,10 @@ namespace Itsomax.Module.Core.Extensions
 
             foreach (var module in GlobalConfiguration.Modules)
             {
-                builder.RegisterAssemblyTypes(module.Assembly).AsImplementedInterfaces();
+                builder.RegisterAssemblyTypes(module.Assembly).Where(t => t.Name.EndsWith("Repository")).AsImplementedInterfaces();
+                builder.RegisterAssemblyTypes(module.Assembly).Where(t => t.Name.EndsWith("Service")).AsImplementedInterfaces();
+                builder.RegisterAssemblyTypes(module.Assembly).Where(t => t.Name.EndsWith("ServiceProvider")).AsImplementedInterfaces();
+                builder.RegisterAssemblyTypes(module.Assembly).Where(t => t.Name.EndsWith("Handler")).AsImplementedInterfaces();
             }
 
             builder.RegisterInstance(configuration);

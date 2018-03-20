@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Itsomax.Data.Infrastructure.Data;
 using Itsomax.Data.Infrastructure.Models;
+using System.Threading.Tasks;
 
 namespace Itsomax.Module.Core.Data
 {
@@ -28,11 +29,6 @@ namespace Itsomax.Module.Core.Data
             return Context.Database.BeginTransaction();
         }
 
-        public void SaveChange()
-        {
-            Context.SaveChanges();
-        }
-
         public IQueryable<T> Query()
         {
             return DbSet;
@@ -41,6 +37,16 @@ namespace Itsomax.Module.Core.Data
         public void Remove(T entity)
         {
             DbSet.Remove(entity);
+        }
+
+        public void SaveChanges()
+        {
+            Context.SaveChanges();
+        }
+
+        public Task SaveChangesAsync()
+        {
+            return Context.SaveChangesAsync();
         }
     }
 }

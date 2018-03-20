@@ -7,7 +7,7 @@ namespace Itsomax.Module.Core.Extensions
 {
     public static class ServiceHangfire
     {
-        public static IServiceCollection LoadHangfire (this IServiceCollection services,IConfigurationRoot configuration)
+        public static IServiceCollection LoadHangfire (this IServiceCollection services,IConfiguration configuration)
         {
             var configDb = configuration.GetSection("UseConnection:DefaultConnection").Value;
 

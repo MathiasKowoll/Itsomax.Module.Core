@@ -76,11 +76,13 @@ namespace Itsomax.Module.Core.Extensions
             var supportedCultures = new[]
             {
                 new CultureInfo("es-ES"),
+                new CultureInfo("es"),
                 new CultureInfo("en-US"),
+                new CultureInfo("en"),
             };
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
-                DefaultRequestCulture = new RequestCulture("es-ES", "es-ES"),
+                DefaultRequestCulture = new RequestCulture("en-US"),
                 SupportedCultures = supportedCultures,
                 SupportedUICultures = supportedCultures
             });
