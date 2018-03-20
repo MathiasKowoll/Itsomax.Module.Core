@@ -22,7 +22,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
-using NToastNotify;
 
 //using Hangfire;
 
@@ -105,7 +104,7 @@ namespace Itsomax.Module.Core.Extensions
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddNToastNotify()
+                .AddNToastNotifyToastr()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
 
             foreach (var module in modules)
