@@ -9,7 +9,7 @@ namespace Itsomax.Module.Core.Models
     {
         public User()
         {
-            CreatedOn = DateTimeOffset.Now;
+            //CreatedOn = DateTimeOffset.Now;
             UpdatedOn = DateTimeOffset.Now;
         }
 
@@ -17,7 +17,7 @@ namespace Itsomax.Module.Core.Models
 
         public DateTimeOffset CreatedOn { get; set; }
 
-        public DateTimeOffset UpdatedOn { get; set; }
+        public DateTimeOffset UpdatedOn { get; }
         public IList<UserRole> Roles { get; set; } =  new List<UserRole>();
     }
 }

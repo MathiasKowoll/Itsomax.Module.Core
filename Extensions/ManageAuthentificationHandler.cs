@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Itsomax.Module.Core.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -8,10 +9,12 @@ namespace Itsomax.Module.Core.Extensions
 	public class ManageAuthentificationHandler : AuthorizationHandler<ManageAuthentificationRequirement>
 	{
         private readonly IHttpContextAccessor _contextAccessor;
+	    private readonly ItsomaxDbContext _dbContext;
 
-        public ManageAuthentificationHandler(IHttpContextAccessor contextAccessor)
-		{
+        public ManageAuthentificationHandler(IHttpContextAccessor contextAccessor,ItsomaxDbContext dbContext)
+        {
             _contextAccessor = contextAccessor;
+            _dbContext = dbContext;
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ManageAuthentificationRequirement requirement)
