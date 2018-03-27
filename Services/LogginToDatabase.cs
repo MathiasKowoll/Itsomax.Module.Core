@@ -1,6 +1,7 @@
 ﻿using Itsomax.Data.Infrastructure.Data;
 using Itsomax.Module.Core.Interfaces;
 using Itsomax.Module.Core.Models;
+using Itsomax.Module.Core.ViewModels;
 using Microsoft.Extensions.Logging;
 
 namespace Itsomax.Module.Core.Services
@@ -18,6 +19,17 @@ namespace Itsomax.Module.Core.Services
             _remote = remote;
             RepoAudit = repoAudit;
             RepoError = repoError;
+        }
+
+        public SuccessErrorHandling SuccessErrorHandlingTask(string loggerMessage, string successErrorType, string toasterMessage, bool succeeded)
+        {
+            return new SuccessErrorHandling
+            {
+                LoggerMessage = loggerMessage,
+                SuccessErrorType = successErrorType,
+                ToasterMessage = toasterMessage,
+                Succeeded = succeeded
+            };
         }
 
         public void InformationLog(string message,string action,string detail,string user)
