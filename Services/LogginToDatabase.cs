@@ -10,10 +10,10 @@ namespace Itsomax.Module.Core.Services
     {
         private readonly ILogger _logger;
         private readonly IGetRemoteInformation _remote;
-        public readonly IRepository<AuditLog> RepoAudit;
+        public readonly IRepository<AuditLogs> RepoAudit;
         public readonly IRepository<ErrorLog> RepoError;
 
-        public LogginToDatabase (ILogger<LogginToDatabase> logger, IGetRemoteInformation remote, IRepository<AuditLog> repoAudit, IRepository<ErrorLog> repoError)
+        public LogginToDatabase (ILogger<LogginToDatabase> logger, IGetRemoteInformation remote, IRepository<AuditLogs> repoAudit, IRepository<ErrorLog> repoError)
         {
             _logger = logger;
             _remote = remote;
@@ -35,7 +35,7 @@ namespace Itsomax.Module.Core.Services
         public void InformationLog(string message,string action,string detail,string user)
         {
             _logger.LogInformation(message, detail);
-            var audit = new AuditLog { Message = message, Detail = detail, Hostname = _remote.GetHostname(), Ip = _remote.GetIp(), LogType = "Information", UserName = user,ActionTrigered=action };
+            var audit = new AuditLogs { Message = message, Detail = detail, Hostname = _remote.GetHostname(), Ip = _remote.GetIp(), LogType = "Information", UserName = user,ActionTrigered=action };
             RepoAudit.Add(audit);
             RepoAudit.SaveChanges();
         }

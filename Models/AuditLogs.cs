@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Itsomax.Module.Core.Models
 {
-    public class AuditLog : EntityBase
+    public class AuditLogs : EntityBase
     {
-        public AuditLog()
+        public AuditLogs()
         {
             CreatedOn = DateTimeOffset.Now;
         }

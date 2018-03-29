@@ -3,7 +3,7 @@ using Itsomax.Data.Infrastructure.Models;
 
 namespace Itsomax.Module.Core.Models
 {
-	public class Content : EntityBase
+	public class Contents : EntityBase
     {
         [MaxLength(100)]
         public string Slug { get; set; }
