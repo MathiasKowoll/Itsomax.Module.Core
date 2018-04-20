@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Itsomax.Module.Core.Interfaces;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +15,24 @@ namespace Itsomax.Module.Core.Services
         public ManageExcelFile(IHostingEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment;
+        }
+
+        public string CopyExcel(string reportName,DateTime reportDate)
+        {
+            var softlandPath = "ExcelTemplate";
+            var sourceFilename = reportName == "SalidaSoftland" ? @"SalidaSoftland.xlsx" : "";
+            var sourceFile = Path.Combine(_hostingEnvironment.WebRootPath,softlandPath, sourceFilename);
+            var destFilename = Path.Combine(_hostingEnvironment.WebRootPath, "Temp", "Softland_"+reportDate.ToString("yyyyMMdd")+".xlsx");
+            if (sourceFilename == "")
+            {
+                return null;
+            }
+            else
+            {
+                //File.Copy(sourceFile,destFilename,true);
+                return destFilename;
+            }
+            
         }
 
         public string CreateExcelFile(string exelName)
