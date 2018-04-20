@@ -93,10 +93,6 @@ namespace Itsomax.Module.Core.Extensions
                 .AddMvc(o =>
                 {
                     o.ModelBinderProviders.Insert(0, new InvariantDecimalModelBinderProvider());
-                    //var policy = new AuthorizationPolicyBuilder(ManageAuthentificationHandler)
-                    //    .RequireAuthenticatedUser()
-                    //    .Build();
-                    //o.Filters.Add(new AuthorizeFilter(policy));
                 })
                 .AddRazorOptions(o =>
                 {

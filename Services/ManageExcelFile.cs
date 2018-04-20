@@ -38,7 +38,7 @@ namespace Itsomax.Module.Core.Services
                 }
                 else
                 {
-                    XSSFWorkbook workbook = new XSSFWorkbook();
+                    XSSFWorkbook workbook = new XSSFWorkbook(fs);
                     sheet = workbook.GetSheetAt(0);
 
                 }
@@ -48,9 +48,11 @@ namespace Itsomax.Module.Core.Services
         }
 
 
-        public void WriteExcelFile(string fileName, List<dynamic> list)
+        public string WriteExcelFile(string fileName, IList<dynamic> list)
         {
+            var properties =list.GetType().GetProperties();
 
+            return fileName;
         }
     }
 }
