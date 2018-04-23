@@ -17,7 +17,7 @@ namespace Itsomax.Module.Core.Services
             _hostingEnvironment = hostingEnvironment;
         }
 
-        public string CopyExcel(string reportName,DateTime reportDate)
+		public IList<string> CopyExcel(string reportName,DateTime reportDate)
         {
             var softlandPath = "ExcelTemplate";
             var sourceFilename = reportName == "SalidaSoftland" ? @"SalidaSoftland.xlsx" : "";
@@ -29,8 +29,11 @@ namespace Itsomax.Module.Core.Services
             }
             else
             {
-                //File.Copy(sourceFile,destFilename,true);
-                return destFilename;
+				//File.Copy(sourceFile,destFilename,true);
+				var nameList = new List<string>();
+				nameList.Add(destFilename);
+				nameList.Add("Softland_"+reportDate.ToString("yyyyMMdd") + ".xlsx");
+				return nameList;
             }
             
         }
