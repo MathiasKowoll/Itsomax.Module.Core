@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using Itsomax.Module.Core.Interfaces;
 using Microsoft.AspNetCore.Hosting;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 
 namespace Itsomax.Module.Core.Services
 {
@@ -17,11 +14,11 @@ namespace Itsomax.Module.Core.Services
             _hostingEnvironment = hostingEnvironment;
         }
 
-		public IList<string> CopyExcel(string reportName,DateTime reportDate)
+		public IList<string> GenerateExcelName(string reportName,DateTime reportDate)
         {
-            var softlandPath = "ExcelTemplate";
+            //const string softlandPath = "ExcelTemplate";
             var sourceFilename = reportName == "SalidaSoftland" ? @"SalidaSoftland.xlsx" : "";
-            var sourceFile = Path.Combine(_hostingEnvironment.WebRootPath,softlandPath, sourceFilename);
+            //var sourceFile = Path.Combine(_hostingEnvironment.WebRootPath,softlandPath, sourceFilename);
             var destFilename = Path.Combine(_hostingEnvironment.WebRootPath, "Temp", "Softland_"+reportDate.ToString("yyyyMMdd")+".xlsx");
             if (sourceFilename == "")
             {
@@ -30,14 +27,12 @@ namespace Itsomax.Module.Core.Services
             else
             {
 				//File.Copy(sourceFile,destFilename,true);
-				var nameList = new List<string>();
-				nameList.Add(destFilename);
-				nameList.Add("Softland_"+reportDate.ToString("yyyyMMdd") + ".xlsx");
-				return nameList;
+                var nameList = new List<string> {destFilename, "Softland_" + reportDate.ToString("yyyyMMdd") + ".xlsx"};
+                return nameList;
             }
             
         }
-
+        /*
         public string CreateExcelFile(string exelName)
         {
             var tempDir = "Temp";
@@ -68,14 +63,16 @@ namespace Itsomax.Module.Core.Services
 
             return newFile;
         }
+        */
 
-
+        /*
         public string WriteExcelFile(string fileName, IList<dynamic> list)
         {
             var properties =list.GetType().GetProperties();
 
             return fileName;
         }
+        */
     }
 }
 
