@@ -9,7 +9,7 @@
     <PackageLicenseUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core/blob/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</RepositoryUrl>
-    <Version>2.0.1-preview1</Version>
+    <Version>2.1.0-preview2</Version>
     <PackageReleaseNotes>move to .net core 2.1 preview1, minor fixes and change in services injection, update ntoast to 5.0</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
