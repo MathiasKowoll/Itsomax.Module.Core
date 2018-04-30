@@ -25,7 +25,7 @@ namespace Itsomax.Module.Core.Services
         {
             var filePath = Path.Combine(GlobalConfiguration.ContentRootPath, "Views", "Shared");
             var file = "_AdminSideMenu.cshtml";
-            var modules = _module.Query().Where(x => x.IsValidModule == true && x.ShortName.Contains("Management")).ToList();
+            var modules = _module.Query().Where(x => x.IsValidModule && x.ShortName.Contains("Management")).ToList();
             var countModules = modules.Count();
             string sidebarMenu = "";
 

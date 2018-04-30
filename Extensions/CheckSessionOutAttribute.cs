@@ -15,7 +15,7 @@ namespace Itsomax.Module.Core.Extensions
         {
             var context = filterContext.HttpContext;
 
-            var userName = context.User.Identity.Name.ToUpper();
+            //var userName = context.User.Identity.Name.ToUpper();
             var getSession = context.Session.GetString("SessionId");
 
             if (string.IsNullOrEmpty(getSession))

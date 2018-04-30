@@ -14,7 +14,7 @@ namespace Itsomax.Module.Core.Services
 
             var file = Path.Combine(path, fileName);
             //var file = path + "/" + fileName+"."+extention;
-            FileStream fileStream = new FileStream(file, FileMode.Create);
+            //FileStream fileStream = new FileStream(file, FileMode.Create);
             return file;
 
         }
