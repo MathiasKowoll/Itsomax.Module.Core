@@ -15,8 +15,7 @@
   <ItemGroup>
     <PackageReference Update="Microsoft.NETCore.App" Version="2.1.0-preview2-26406-04" />
     <PackageReference Include="Hangfire" Version="1.7.0-beta1" />
-    <PackageReference Include="Hangfire.PostgreSql" Version="1.4.8.1" />
-    <PackageReference Include="Itsomax.Data.Infrastructure" Version="2.1.0-preview2" />
+    <PackageReference Include="Hangfire.PostgreSql" Version="1.4.8.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.1.0-preview2-final" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.0-preview2-final" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.0-preview2-final" />
@@ -29,5 +28,8 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.5.0-preview2-26406-04" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
     <PackageReference Include="NToastNotify" Version="5.0.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Libraries\Itsomax.Data.Infrastructure\Itsomax.Data.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
