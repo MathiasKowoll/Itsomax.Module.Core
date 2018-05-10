@@ -9,23 +9,23 @@
     <PackageLicenseUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core/blob/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</RepositoryUrl>
-    <Version>2.1.0-preview2</Version>
+    <Version>2.1.0-rc1</Version>
     <PackageReleaseNotes>move to .net core 2.1 preview1, minor fixes and change in services injection, update ntoast to 5.0</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Update="Microsoft.NETCore.App" Version="2.1.0-preview2-26406-04" />
+    <PackageReference Update="Microsoft.NETCore.App" Version="2.1.0-rc1" />
     <PackageReference Include="Hangfire" Version="1.7.0-beta1" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.4.8.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.1.0-preview2-final" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.0-preview2-final" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.0-preview2-final" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.0-preview2-final" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.1.0-rc1-final" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.0-rc1-final" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.0-rc1-final" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.0-rc1-final" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.0-preview2-final" />
-    <PackageReference Include="npgsql" Version="4.0.0-preview2" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.0-preview2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.0-rc1-final" />
+    <PackageReference Include="npgsql" Version="4.0.0-rc1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.0-rc1" />
     <PackageReference Include="NPOI.Core.Extension" Version="1.0.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.5.0-preview2-26406-04" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.0-rc1" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
     <PackageReference Include="NToastNotify" Version="5.0.7" />
   </ItemGroup>

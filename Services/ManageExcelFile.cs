@@ -14,20 +14,21 @@ namespace Itsomax.Module.Core.Services
             _hostingEnvironment = hostingEnvironment;
         }
 
-		public IList<string> GenerateExcelName(string reportName,DateTime reportDate)
+		public IList<string> GenerateExcelName(string reportName,DateTime reportDate,string warehouse)
         {
             //const string softlandPath = "ExcelTemplate";
-            var sourceFilename = reportName == "SalidaSoftland" ? @"SalidaSoftland.xlsx" : "";
+			var sourceFilename = reportName == "SalidaSoftland"+warehouse ? @"SalidaSoftland"+warehouse+".xlsx" : "";
             //var sourceFile = Path.Combine(_hostingEnvironment.WebRootPath,softlandPath, sourceFilename);
-            var destFilename = Path.Combine(_hostingEnvironment.WebRootPath, "Temp", "Softland_"+reportDate.ToString("yyyyMMdd")+".xlsx");
+            var destFilename = Path.Combine(_hostingEnvironment.WebRootPath, "Temp", reportName + reportDate.ToString("yyyyMMdd")+".xlsx");
             if (sourceFilename == "")
             {
-                return null;
+				var nameList = new List<string> { null, null };
+				return nameList;
             }
             else
             {
 				//File.Copy(sourceFile,destFilename,true);
-                var nameList = new List<string> {destFilename, "Softland_" + reportDate.ToString("yyyyMMdd") + ".xlsx"};
+                var nameList = new List<string> {destFilename, reportName + reportDate.ToString("yyyyMMdd") + ".xlsx"};
                 return nameList;
             }
             
