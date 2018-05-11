@@ -20,7 +20,7 @@ namespace Itsomax.Module.Core.Models
         public string Detail { get; set; }
         [MaxLength(100)]
         public string UserName { get; set; }
-        [MaxLength(15)]
+        [MaxLength(50)]
         public string Ip { get; set; }
         public string Hostname { get; set; }
         public DateTimeOffset CreatedOn { get; set; }
