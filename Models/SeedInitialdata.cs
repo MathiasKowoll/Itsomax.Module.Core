@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -12,8 +13,9 @@ namespace Itsomax.Module.Core.Models
 {
     public static class SeedInitialdata
     {
-        private static readonly string[] AppSettingsListBool = new string[] { "SeedData", "NewModule", "CreateAdmin", "RefreshClaims", "NewModuleCreateMenu" };
-        private static readonly string[] AppSettingsListEmpty = new string[] {"SmptUrl", "SmptAccount", "SmptPassword" };
+        private static readonly string[] AppSettingsListBool = new string[] { "SeedData", "NewModule", "CreateAdmin", 
+            "RefreshClaims", "NewModuleCreateMenu" };
+        private static readonly string[] AppSettingsListEmpty = new string[] {"SystemTitle", "SystemLoginText", "Header" };
 
         public static async Task CreateDb(IServiceProvider serviceProvider)
         {
@@ -78,6 +80,7 @@ namespace Itsomax.Module.Core.Models
             using (var context = new ItsomaxDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<ItsomaxDbContext>>()))
             {
+                IList<string> optionList = new List<string>();
 
                 foreach (var appSettingsListBool in AppSettingsListBool)
                 {
@@ -86,6 +89,8 @@ namespace Itsomax.Module.Core.Models
                         var appSave = new AppSetting { Key = appSettingsListBool, Value = "true" };
                         context.AppSettings.Add(appSave);
                         context.SaveChanges();
+
+                        optionList.Add(appSettingsListBool);
                     }
                 }
 
@@ -95,6 +100,19 @@ namespace Itsomax.Module.Core.Models
                     {
                         var appSave = new AppSetting { Key = appSettingsListEmpty, Value = "" };
                         context.AppSettings.Add(appSave);
+                        context.SaveChanges();
+                        optionList.Add(appSettingsListEmpty);
+                    }
+                }
+
+                
+                
+                var settings = context.AppSettings.ToList();
+                foreach (var item in settings)
+                {
+                    if (!optionList.Any(x => x.Contains(item.Key)))
+                    {
+                        context.AppSettings.Remove(item);
                         context.SaveChanges();
                     }
                 }
