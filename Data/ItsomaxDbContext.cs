@@ -17,7 +17,7 @@ namespace Itsomax.Module.Core.Data
         public ItsomaxDbContext(DbContextOptions options) : base(options)
         {
         }
-
+        
         public DbSet<Modules> Modules { get; set; }
 		public DbSet<ModuleContent> ModuleContent { get; set; }
         public DbSet<ModuleRole> ModuleRole { get; set; }
@@ -25,6 +25,7 @@ namespace Itsomax.Module.Core.Data
         public DbSet<AppSetting> AppSettings { get; set; }
         public DbSet<AuditLogs> AuditLog { get; set; }
         public DbSet<ErrorLog> ErrorLog { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
