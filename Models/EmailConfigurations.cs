@@ -15,7 +15,7 @@ namespace Itsomax.Module.Core.Models
         public int Port { get; set; }
         [MaxLength(100)]
         public string User { get; set; }
-        public byte?[] Password { get; set; }
+        public byte[] Password { get; set; }
         [MaxLength(100)]
         public string Domain { get; set; }
         [MaxLength(150)]
