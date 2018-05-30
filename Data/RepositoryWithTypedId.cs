@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Itsomax.Data.Infrastructure.Data;
 using Itsomax.Data.Infrastructure.Models;
 using System.Threading.Tasks;
@@ -12,22 +11,17 @@ namespace Itsomax.Module.Core.Data
 {
     public class RepositoryWithTypedId<T, TId> : IRepositoryWithTypedId<T, TId> where T : class, IEntityWithTypedId<TId>
     {
-        //public RepositoryWithTypedId(ItsomaxDbContext context)
-        //{
-        //    Context = context;
-            //DbSet = Context.Set<T>();
-        //}
 
         protected readonly DbContext Context;
-        //protected DbSet<T> DbSet { get; }
+        protected DbSet<T> DbSet { get; }
 
         public RepositoryWithTypedId(DbContext context)
         {
             Context = context;
-            //DbSet = Context.Set<T>()
+            DbSet = Context.Set<T>();
         }
         
-        public T Get(long id)
+        public T GetById(long id)
         {
             return Context.Set<T>().Find(id);
         }
@@ -67,16 +61,12 @@ namespace Itsomax.Module.Core.Data
         {
             return Context.Database.BeginTransaction();
         }
-        
+        */
         public IQueryable<T> Query()
         {
             return DbSet;
         }
-        */
         
-        
-
-        /*
         public void SaveChanges()
         {
             Context.SaveChanges();
@@ -86,6 +76,6 @@ namespace Itsomax.Module.Core.Data
         {
             return Context.SaveChangesAsync();
         }
-        */
+        
     }
 }

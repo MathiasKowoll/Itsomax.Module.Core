@@ -31,9 +31,9 @@
             return result;
         }
         
-        public static SystemSucceededTask Failed(string errors,string innerError,bool isDb,bool OtherError)
+        public static SystemSucceededTask Failed(string errors,string innerError,bool isDb,bool otherError)
         {
-            var result = new SystemSucceededTask {Succeeded = false,IsDbError = isDb,IsOtherError = OtherError};
+            var result = new SystemSucceededTask {Succeeded = false,IsDbError = isDb,IsOtherError = otherError};
             if (errors != null)
             {
                 result._errors = errors;
