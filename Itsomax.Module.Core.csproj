@@ -13,8 +13,8 @@
     <PackageReleaseNotes>move to .net core 2.1 rc, minor fixes and change in services injection, update ntoast to 5.0.7</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.App" Version="2.1.0" />
-    <PackageReference Include="Hangfire" Version="1.7.0-beta1" />
+    <PackageReference Update="Microsoft.NETCore.App" Version="2.1.0" />
+    <PackageReference Include=  "Hangfire" Version="1.7.0-beta1" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.4.8.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.0" />
