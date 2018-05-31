@@ -24,7 +24,6 @@ namespace Itsomax.Module.Core.Data
         public DbSet<SubModule> SubModule { get; set; }
         public DbSet<AppSetting> AppSettings { get; set; }
         public DbSet<AuditLogs> AuditLog { get; set; }
-        public DbSet<ErrorLog> ErrorLog { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
