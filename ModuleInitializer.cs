@@ -21,9 +21,9 @@ namespace Itsomax.Module.Core
         {
             serviceCollection.AddScoped<SignInManager<User>, ItsomaxSignInManager<User>>();
             serviceCollection.AddSingleton<ICreateMenu, CreateMenu>();
-            serviceCollection.AddSingleton<IEmailService, EmailService>();
+            serviceCollection.AddScoped<IEmailService, EmailService>();
             serviceCollection.AddSingleton<IGetRemoteInformation, GetRemoteInformation>();
-            serviceCollection.AddSingleton<ILogginToDatabase, LogginToDatabase>();
+            serviceCollection.AddScoped<ILogginToDatabase, LogginToDatabase>();
             serviceCollection.AddSingleton<IManageExcelFile, ManageExcelFile>();
             serviceCollection.AddSingleton<IManageFiles, ManageFiles>();
             serviceCollection.AddAuthorization(options =>
