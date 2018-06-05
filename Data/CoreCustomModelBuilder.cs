@@ -48,8 +48,10 @@ namespace Itsomax.Module.Core.Data
 
             modelBuilder.Entity<ModuleRole>(o =>
             {
+                o.HasKey(x => new {x.RoleId, x.SubModuleId});
                 o.HasOne(x => x.Role).WithMany(x => x.ModuleRoles).HasForeignKey(x => x.RoleId);
                 o.HasOne(x => x.SubModule).WithMany(x => x.ModuleRoles).HasForeignKey(x => x.SubModuleId);
+                o.ToTable("ModuleRole", "Core");
             });
 
             modelBuilder.Entity<SubModule>(o =>
