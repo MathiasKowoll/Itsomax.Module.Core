@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Itsomax.Data.Infrastructure;
+using Itsomax.Module.Core.Data;
 using Microsoft.AspNetCore.Identity;
 using Itsomax.Module.Core.Extensions;
 using Itsomax.Module.Core.Interfaces;
@@ -32,6 +33,7 @@ namespace Itsomax.Module.Core
                     policy => policy.Requirements.Add(new ManageAuthentificationRequirement()));
             });
             serviceCollection.AddSingleton<IAuthorizationHandler,ManageAuthentificationHandler>();
+            serviceCollection.AddScoped<ICustomRepositoryFunctions, CustomRepositoryFunctions>();
         }
     }
 }
