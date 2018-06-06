@@ -59,7 +59,7 @@ namespace Itsomax.Module.Core.Services
             var file = Path.Combine(path, fileName);
             try
             {
-                FileStream fileStream = new FileStream(file, FileMode.Open);
+                var fileStream = new FileStream(file, FileMode.Open);
                 fileStream.Dispose();
                 return true;
             }

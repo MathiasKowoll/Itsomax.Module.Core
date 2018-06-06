@@ -5,6 +5,7 @@ using System.IO;
 using Itsomax.Module.Core.Interfaces;
 using System.Linq;
 using System;
+using Itsomax.Module.Core.Data;
 
 namespace Itsomax.Module.Core.Services
 {
@@ -12,13 +13,13 @@ namespace Itsomax.Module.Core.Services
     {
         private readonly IRepository<Modules> _module;
         private readonly IManageFiles _manageFile;
-        private readonly IRepository<AppSetting> _appSettings;
-        public CreateMenu(IRepository<Modules> module, IRepository<AppSetting> appSettings,
+        private readonly ItsomaxDbContext _context;
+        public CreateMenu(IRepository<Modules> module,ItsomaxDbContext context,
                           IManageFiles manageFile)
         {
             _module = module;
             _manageFile = manageFile;
-            _appSettings = appSettings;
+            _context = context;
         }
 
         public void CreteMenuFile()
@@ -39,15 +40,16 @@ namespace Itsomax.Module.Core.Services
                     var checkFile = count + "_" + itemMod.ShortName + "SideMenu.cshtml";
                     if (_manageFile.ExistFile(filePath, checkFile))
                     {
-                        sidebarMenu = sidebarMenu + "@await Html.PartialAsync(\"" + checkFile + "\")" + Environment.NewLine;
+                        sidebarMenu = sidebarMenu + "@await Html.PartialAsync(\"" + checkFile + "\")" +
+                                      Environment.NewLine;
                     }
                 }
                 count++;
             }
             _manageFile.EditFile(filePath, sidebarMenu, file);
-            var appSettings = _appSettings.Query().FirstOrDefault(x => x.Key == "NewModuleCreateMenu");
+            var appSettings = _context.Set<AppSetting>().FirstOrDefault(x => x.Key == "NewModuleCreateMenu");
             if (appSettings != null) appSettings.Value = "false";
-            _appSettings.SaveChanges();
+            _context.SaveChanges();
 
         }
     }

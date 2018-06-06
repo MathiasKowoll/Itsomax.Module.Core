@@ -75,7 +75,8 @@ namespace Itsomax.Module.Core.Extensions
             foreach (var module in modules)
 
             {
-                var moduleInitializerType = module.Assembly.GetTypes().FirstOrDefault(x => typeof(IModuleInitializer).IsAssignableFrom(x));
+                var moduleInitializerType = module.Assembly.GetTypes()
+                    .FirstOrDefault(x => typeof(IModuleInitializer).IsAssignableFrom(x));
                 if ((moduleInitializerType != null) && (moduleInitializerType != typeof(IModuleInitializer)))
                 {
                     services.AddSingleton(typeof(IModuleInitializer), moduleInitializerType);
@@ -97,7 +98,8 @@ namespace Itsomax.Module.Core.Extensions
                 {
                     foreach (var module in modules)
                     {
-                        o.AdditionalCompilationReferences.Add(MetadataReference.CreateFromFile(module.Assembly.Location));
+                        o.AdditionalCompilationReferences.Add(
+                            MetadataReference.CreateFromFile(module.Assembly.Location));
                     }
                 })
                 .AddViewLocalization()
@@ -114,21 +116,29 @@ namespace Itsomax.Module.Core.Extensions
             return services;
         }
 
-        public static IServiceCollection AddCustomizedIdentity(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCustomizedIdentity(this IServiceCollection services, 
+            IConfiguration configuration)
         {
             services.AddIdentity<User, Role>(o =>
-            {
-                o.Password.RequireDigit = Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireDigit").Value);
-                o.Password.RequireNonAlphanumeric = Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireNonAlphanumeric").Value);
+                {
+                    o.Password.RequireDigit =
+                        Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireDigit").Value);
+                    o.Password.RequireNonAlphanumeric =
+                        Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireNonAlphanumeric").Value);
                 o.Password.RequiredLength = Convert.ToInt32(configuration.GetSection("ConfigSystem:RequiredLength").Value);
-                o.Password.RequireLowercase = Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireLowercase").Value);
-                o.Password.RequireUppercase = Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireUppercase").Value);
-                o.Lockout.AllowedForNewUsers = Convert.ToBoolean(configuration.GetSection("ConfigSystem:AllowedForNewUsers").Value);
-                o.Lockout.MaxFailedAccessAttempts = Convert.ToInt32(configuration.GetSection("ConfigSystem:MaxFailedAccessAttempts").Value);
-                o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(Convert.ToInt32(configuration.GetSection("ConfigSystem:DefaultLockoutTimeSpanDays").Value));
+                    o.Password.RequireLowercase =
+                        Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireLowercase").Value);
+                    o.Password.RequireUppercase =
+                        Convert.ToBoolean(configuration.GetSection("ConfigSystem:RequireUppercase").Value);
+                    o.Lockout.AllowedForNewUsers =
+                        Convert.ToBoolean(configuration.GetSection("ConfigSystem:AllowedForNewUsers").Value);
+                    o.Lockout.MaxFailedAccessAttempts =
+                        Convert.ToInt32(configuration.GetSection("ConfigSystem:MaxFailedAccessAttempts").Value);
+                    o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(
+                        Convert.ToInt32(configuration.GetSection("ConfigSystem:DefaultLockoutTimeSpanDays").Value));
 
 
-            })
+                })
             .AddDefaultTokenProviders()
             .AddRoleStore<ItsomaxRoleStore>()
             .AddUserStore<ItsomaxUserStore>();

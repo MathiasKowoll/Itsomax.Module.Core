@@ -19,7 +19,8 @@ namespace Itsomax.Module.Core.Services
             //const string softlandPath = "ExcelTemplate";
 			var sourceFilename = reportName == "SalidaSoftland"+warehouse ? @"SalidaSoftland"+warehouse+".xlsx" : "";
             //var sourceFile = Path.Combine(_hostingEnvironment.WebRootPath,softlandPath, sourceFilename);
-            var destFilename = Path.Combine(_hostingEnvironment.WebRootPath, "Temp", reportName + reportDate.ToString("yyyyMMdd")+".xlsx");
+            var destFilename = Path.Combine(_hostingEnvironment.WebRootPath, "Temp",
+                reportName + reportDate.ToString("yyyyMMdd") + ".xlsx");
             if (sourceFilename == "")
             {
 				var nameList = new List<string> { null, null };

@@ -12,7 +12,8 @@ using Itsomax.Module.Core.Models;
 
 namespace Itsomax.Module.Core.Data
 {
-    public class ItsomaxDbContext : IdentityDbContext<User, Role, long, IdentityUserClaim<long>, UserRole, IdentityUserLogin<long>, IdentityRoleClaim<long>, IdentityUserToken<long>>
+    public class ItsomaxDbContext : IdentityDbContext<User, Role, long, IdentityUserClaim<long>, 
+        UserRole, IdentityUserLogin<long>, IdentityRoleClaim<long>, IdentityUserToken<long>>
     {
         public ItsomaxDbContext(DbContextOptions options) : base(options)
         {
@@ -20,15 +21,13 @@ namespace Itsomax.Module.Core.Data
         
         public DbSet<Modules> Modules { get; set; }
 		public DbSet<ModuleContent> ModuleContent { get; set; }
-        public DbSet<ModuleRole> ModuleRole { get; set; }
         public DbSet<SubModule> SubModule { get; set; }
         public DbSet<AppSetting> AppSettings { get; set; }
-        public DbSet<AuditLogs> AuditLog { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            List<Type> typeToRegisters = new List<Type>();
+            var typeToRegisters = new List<Type>();
             foreach (var module in GlobalConfiguration.Modules)
             {
                 typeToRegisters.AddRange(module.Assembly.DefinedTypes.Select(t => t.AsType()));
@@ -48,21 +47,17 @@ namespace Itsomax.Module.Core.Data
         {
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {
-                if (entity.ClrType.Namespace != null)
-                {
-                    var nameParts = entity.ClrType.Namespace.Split('.');
-                    //var tableName = string.Concat(nameParts[2].Replace("Management","").Replace("System",""), "", entity.ClrType.Name);
-                    //var schemaName = tableName.Replace(entity.ClrType.Name, "");
-                    var schemaName = nameParts[2].Replace("Management", "").Replace("System", "");
-                    modelBuilder.Entity(entity.Name).ToTable(entity.ClrType.Name,schemaName);
-                    //modelBuilder.Entity(entity.Name).ToTable(tableName);
-                }
+                if (entity.ClrType.Namespace == null) continue;
+                var nameParts = entity.ClrType.Namespace.Split('.');
+                var schemaName = nameParts[2].Replace("Management", "").Replace("System", "");
+                modelBuilder.Entity(entity.Name).ToTable(entity.ClrType.Name,schemaName);
             }
         }
 
         private static void RegisterEntities(ModelBuilder modelBuilder, IEnumerable<Type> typeToRegisters)
         {
-            var entityTypes = typeToRegisters.Where(x => x.GetTypeInfo().IsSubclassOf(typeof(EntityBase)) && !x.GetTypeInfo().IsAbstract);
+            var entityTypes = typeToRegisters.Where(x =>
+                x.GetTypeInfo().IsSubclassOf(typeof(EntityBase)) && !x.GetTypeInfo().IsAbstract);
             foreach (var type in entityTypes)
             {
                 modelBuilder.Entity(type);
@@ -74,11 +69,9 @@ namespace Itsomax.Module.Core.Data
             var customModelBuilderTypes = typeToRegisters.Where(x => typeof(ICustomModelBuilder).IsAssignableFrom(x));
             foreach (var builderType in customModelBuilderTypes)
             {
-                if (builderType != null && builderType != typeof(ICustomModelBuilder))
-                {
-                    var builder = (ICustomModelBuilder)Activator.CreateInstance(builderType);
-                    builder.Build(modelBuilder);
-                }
+                if (builderType == null || builderType == typeof(ICustomModelBuilder)) continue;
+                var builder = (ICustomModelBuilder)Activator.CreateInstance(builderType);
+                builder.Build(modelBuilder);
             }
         }
 

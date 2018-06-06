@@ -1,10 +1,9 @@
-﻿using Itsomax.Data.Infrastructure.Models;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Itsomax.Module.Core.Models
 {
-    public class AuditLogs : EntityBase
+    public class AuditLogs
     {
         public AuditLogs()
         {

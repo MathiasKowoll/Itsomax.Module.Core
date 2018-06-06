@@ -14,7 +14,8 @@ namespace Itsomax.Module.Core.Extensions
             _contextAccessor = contextAccessor;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ManageAuthentificationRequirement requirement)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, 
+	        ManageAuthentificationRequirement requirement)
 		{
 
 

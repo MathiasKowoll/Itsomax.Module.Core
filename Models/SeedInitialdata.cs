@@ -80,42 +80,36 @@ namespace Itsomax.Module.Core.Models
             using (var context = new ItsomaxDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<ItsomaxDbContext>>()))
             {
-                IList<string> optionList = new List<string>();
+                IList<AppSetting> appSettings = new List<AppSetting>();
+                IList<AppSetting> appSettingsAllSettings = new List<AppSetting>();
 
                 foreach (var appSettingsListBool in AppSettingsListBool)
                 {
-                    if (!context.AppSettings.Any(x => x.Key == appSettingsListBool))
-                    {
-                        var appSave = new AppSetting { Key = appSettingsListBool, Value = "true" };
-                        context.AppSettings.Add(appSave);
-                        context.SaveChanges();
-
-                        optionList.Add(appSettingsListBool);
-                    }
+                    if (context.AppSettings.Any(x => x.Key == appSettingsListBool)) continue;
+                    appSettings.Add(new AppSetting { Key = appSettingsListBool, Value = "true" });
+                    appSettingsAllSettings.Add(new AppSetting { Key = appSettingsListBool, Value = "true" });
                 }
-
+                
                 foreach (var appSettingsListEmpty in AppSettingsListEmpty)
                 {
-                    if (!context.AppSettings.Any(x => x.Key == appSettingsListEmpty))
-                    {
-                        var appSave = new AppSetting { Key = appSettingsListEmpty, Value = "" };
-                        context.AppSettings.Add(appSave);
-                        context.SaveChanges();
-                        optionList.Add(appSettingsListEmpty);
-                    }
+                    if (context.AppSettings.Any(x => x.Key == appSettingsListEmpty)) continue;
+                    appSettings.Add(new AppSetting { Key = appSettingsListEmpty, Value = "" });
+                    appSettingsAllSettings.Add(new AppSetting { Key = appSettingsListEmpty, Value = "" });
                 }
+                context.AddRange(appSettings);
+                context.SaveChanges();
 
-                
-                
                 var settings = context.AppSettings.ToList();
+                IList<AppSetting> appSettingsRemove = new List<AppSetting>();
                 foreach (var item in settings)
                 {
-                    if (!optionList.Any(x => x.Contains(item.Key)))
+                    if (!appSettingsAllSettings.Any(x => x.Key.Contains(item.Key)))
                     {
-                        context.AppSettings.Remove(item);
-                        context.SaveChanges();
+                        appSettingsRemove.Add(item);
                     }
                 }
+                context.AppSettings.RemoveRange(appSettingsRemove);
+                context.SaveChanges();
             }
         }
 
@@ -134,7 +128,7 @@ namespace Itsomax.Module.Core.Models
                 {
 
                     var existModuleGlobal = GlobalConfiguration.Modules.FirstOrDefault(x => x.Name == item.Name);
-                    if (existModuleGlobal == null)
+                    if (existModuleGlobal != null) continue;
                     {
                         var moduleDelete = context.Modules.FirstOrDefault(x => x.Id == item.Id);
                         if (moduleDelete != null) context.Modules.Remove(moduleDelete);

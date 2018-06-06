@@ -9,6 +9,14 @@ namespace Itsomax.Module.Core.Data
     {
         public void Build(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AppSetting>()
+                .ToTable("AppSetting", "Core")
+                .HasKey(x => new {x.Key,x.Value});
+
+            modelBuilder.Entity<AuditLogs>()
+                .ToTable("AuditLogs", "Core")
+                .HasKey(x => new {x.CreatedOn, x.ActionTrigered, x.UserName});
+            
             modelBuilder.Entity<User>()
                 .ToTable("User", "Core");
 
