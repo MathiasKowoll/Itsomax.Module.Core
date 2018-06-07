@@ -96,9 +96,7 @@ namespace Itsomax.Module.Core.Models
                     appSettings.Add(new AppSetting { Key = appSettingsListEmpty, Value = "" });
                     appSettingsAllSettings.Add(new AppSetting { Key = appSettingsListEmpty, Value = "" });
                 }
-                context.AddRange(appSettings);
-                context.SaveChanges();
-
+               
                 var settings = context.AppSettings.ToList();
                 IList<AppSetting> appSettingsRemove = new List<AppSetting>();
                 foreach (var item in settings)
@@ -109,6 +107,8 @@ namespace Itsomax.Module.Core.Models
                     }
                 }
                 context.AppSettings.RemoveRange(appSettingsRemove);
+                context.SaveChanges();
+                context.AddRange(appSettings);
                 context.SaveChanges();
             }
         }

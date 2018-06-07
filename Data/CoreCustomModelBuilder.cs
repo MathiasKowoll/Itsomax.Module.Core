@@ -11,7 +11,7 @@ namespace Itsomax.Module.Core.Data
         {
             modelBuilder.Entity<AppSetting>()
                 .ToTable("AppSetting", "Core")
-                .HasKey(x => new {x.Key,x.Value});
+                .HasKey(x => new {x.Key});
 
             modelBuilder.Entity<AuditLogs>()
                 .ToTable("AuditLogs", "Core")
