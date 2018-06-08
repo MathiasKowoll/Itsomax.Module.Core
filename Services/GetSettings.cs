@@ -14,23 +14,23 @@ namespace Itsomax.Module.Core.Services
 
         public string SystemTitle()
         {
-            var title = string.Empty;
+            const string title = "System Title";
             var systemTitle =_context.AppSettings.FirstOrDefault(x => x.Key == "SystemTitle");
-            return systemTitle == null ? title : systemTitle.Value;
+            return string.IsNullOrEmpty(systemTitle.Value) ? title : systemTitle.Value;
         }
         
         public string SystemLoginText()
         {
-            var loginText = string.Empty;
-            var systemTitle =_context.AppSettings.FirstOrDefault(x => x.Key == "SystemLoginText");
-            return systemTitle == null ? loginText : systemTitle.Value;
+            const string loginText = "System Login Text";
+            var systemLoginTitle =_context.AppSettings.FirstOrDefault(x => x.Key == "SystemLoginText");
+            return string.IsNullOrEmpty(systemLoginTitle.Value) ? loginText : systemLoginTitle.Value;
         }
         
-        public string Header()
+        public string LoginImageUrl()
         {
-            var header = string.Empty;
-            var systemTitle =_context.AppSettings.FirstOrDefault(x => x.Key == "SystemTitle");
-            return systemTitle == null ? header : systemTitle.Value;
+            const string imageUrl = "/assets/images/background/login-register2.jpg";
+            var systemUrlText =_context.AppSettings.FirstOrDefault(x => x.Key == "LoginImageUrl");
+            return string.IsNullOrEmpty(systemUrlText.Value) ? imageUrl : systemUrlText.Value;
         }
     }
 }

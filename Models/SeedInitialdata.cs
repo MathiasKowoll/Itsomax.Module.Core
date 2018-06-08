@@ -15,7 +15,9 @@ namespace Itsomax.Module.Core.Models
     {
         private static readonly string[] AppSettingsListBool = { "SeedData", "NewModule", "CreateAdmin", 
             "RefreshClaims", "NewModuleCreateMenu" };
-        private static readonly string[] AppSettingsListEmpty = {"SystemTitle", "SystemLoginText","ImageUrl" };
+
+        private static readonly string[] AppSettingsListEmpty =
+            {"SystemTitle", "SystemLoginText", "LoginImageUrl", "BigLogoUrl","SmallLogoUrl"};
 
         public static async Task CreateDb(IServiceProvider serviceProvider)
         {
@@ -36,7 +38,8 @@ namespace Itsomax.Module.Core.Models
             {
                 using (var command = context.Database.GetDbConnection().CreateCommand())
                 {
-                    command.CommandText = "SELECT * FROM pg_available_extensions where name like 'plpython2u' and installed_version is null";
+                    command.CommandText =
+                        "SELECT * FROM pg_available_extensions where name like 'plpython2u' and installed_version is null";
                     await context.Database.OpenConnectionAsync();
 
                     using (var result =  command.ExecuteReaderAsync().Result)
@@ -56,7 +59,8 @@ namespace Itsomax.Module.Core.Models
 
                 using (var command = context.Database.GetDbConnection().CreateCommand())
                 {
-                    command.CommandText = "SELECT * FROM pg_available_extensions where name like 'pgcrypto' and installed_version is null";
+                    command.CommandText =
+                        "SELECT * FROM pg_available_extensions where name like 'pgcrypto' and installed_version is null";
                     await context.Database.OpenConnectionAsync();
 
                     using (var result = command.ExecuteReaderAsync().Result)
@@ -85,30 +89,31 @@ namespace Itsomax.Module.Core.Models
 
                 foreach (var appSettingsListBool in AppSettingsListBool)
                 {
+                    appSettingsAllSettings.Add(new AppSetting { Key = appSettingsListBool, Value = "true" });
                     if (context.AppSettings.Any(x => x.Key == appSettingsListBool)) continue;
                     appSettings.Add(new AppSetting { Key = appSettingsListBool, Value = "true" });
-                    appSettingsAllSettings.Add(new AppSetting { Key = appSettingsListBool, Value = "true" });
                 }
+                
                 
                 foreach (var appSettingsListEmpty in AppSettingsListEmpty)
                 {
+                    appSettingsAllSettings.Add(new AppSetting { Key = appSettingsListEmpty, Value = "" });
                     if (context.AppSettings.Any(x => x.Key == appSettingsListEmpty)) continue;
                     appSettings.Add(new AppSetting { Key = appSettingsListEmpty, Value = "" });
-                    appSettingsAllSettings.Add(new AppSetting { Key = appSettingsListEmpty, Value = "" });
                 }
                
                 var settings = context.AppSettings.ToList();
                 IList<AppSetting> appSettingsRemove = new List<AppSetting>();
                 foreach (var item in settings)
                 {
-                    if (!appSettingsAllSettings.Any(x => x.Key.Contains(item.Key)))
+                    if (!appSettingsAllSettings.Any(x => x.Key.Equals(item.Key)))
                     {
                         appSettingsRemove.Add(item);
                     }
                 }
-                context.AppSettings.RemoveRange(appSettingsRemove);
+                context.AppSettings.AddRange(appSettings);
                 context.SaveChanges();
-                context.AddRange(appSettings);
+                context.AppSettings.RemoveRange(appSettingsRemove);
                 context.SaveChanges();
             }
         }
