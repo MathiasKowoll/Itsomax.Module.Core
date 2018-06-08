@@ -18,6 +18,7 @@ using Itsomax.Module.Core.Data;
 using Itsomax.Module.Core.Models;
 using Itsomax.Data.Infrastructure.Web.ModelBinders;
 using System.Threading.Tasks;
+using Itsomax.Module.Core.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -205,6 +206,9 @@ namespace Itsomax.Module.Core.Extensions
             builder.RegisterInstance(configuration);
             builder.RegisterInstance(hostingEnvironment);
             builder.Populate(services);
+            
+            //builder.RegisterType<GetSettings>()
+            
             var container = builder.Build();
             return container.Resolve<IServiceProvider>();
         }

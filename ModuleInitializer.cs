@@ -16,7 +16,6 @@ namespace Itsomax.Module.Core
     {
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-
         }
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
@@ -34,6 +33,7 @@ namespace Itsomax.Module.Core
             });
             serviceCollection.AddSingleton<IAuthorizationHandler,ManageAuthentificationHandler>();
             serviceCollection.AddScoped<ICustomRepositoryFunctions, CustomRepositoryFunctions>();
+            serviceCollection.AddTransient<GetSettings>();
         }
     }
 }
