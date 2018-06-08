@@ -1,7 +1,5 @@
 ﻿using System.Linq;
 using Itsomax.Module.Core.Data;
-using Itsomax.Module.Core.Interfaces;
-using Itsomax.Module.Core.ViewModels;
 
 namespace Itsomax.Module.Core.Services
 {
