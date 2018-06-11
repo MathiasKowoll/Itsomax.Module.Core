@@ -26,11 +26,27 @@ namespace Itsomax.Module.Core.Services
             return string.IsNullOrEmpty(systemLoginTitle.Value) ? loginText : systemLoginTitle.Value;
         }
         
-        public string LoginImageUrl()
+        public string SystemLoginImageUrl()
         {
             const string imageUrl = "/assets/images/background/login-register2.jpg";
-            var systemUrlText =_context.AppSettings.FirstOrDefault(x => x.Key == "LoginImageUrl");
+            var systemUrlText =_context.AppSettings.FirstOrDefault(x => x.Key == "SystemLoginImageUrl");
             return string.IsNullOrEmpty(systemUrlText.Value) ? imageUrl : systemUrlText.Value;
         }
+        
+        public string SystemLoginBigLogoUrl()
+        {
+            const string logoUrl = "/assets/images/background/login-register2.jpg";
+            var systemUrlText =_context.AppSettings.FirstOrDefault(x => x.Key == "SystemBigLogoUrl");
+            return string.IsNullOrEmpty(systemUrlText.Value) ? logoUrl : systemUrlText.Value;
+        }
+        
+        public string SystemLoginSmallLogoUrl()
+        {
+            const string logoUrl = "/assets/images/background/login-register2.jpg";
+            var systemUrlText =_context.AppSettings.FirstOrDefault(x => x.Key == "SystemBigLogoUrl");
+            return string.IsNullOrEmpty(systemUrlText.Value) ? logoUrl : systemUrlText.Value;
+        }
+    
+    
     }
 }

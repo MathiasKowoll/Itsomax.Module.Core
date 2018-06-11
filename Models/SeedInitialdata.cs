@@ -17,7 +17,7 @@ namespace Itsomax.Module.Core.Models
             "RefreshClaims", "NewModuleCreateMenu" };
 
         private static readonly string[] AppSettingsListEmpty =
-            {"SystemTitle", "SystemLoginText", "LoginImageUrl", "BigLogoUrl","SmallLogoUrl"};
+            {"SystemTitle", "SystemLoginText", "SystemLoginImageUrl", "SystemBigLogoUrl","SystemSmallLogoUrl"};
 
         public static async Task CreateDb(IServiceProvider serviceProvider)
         {
