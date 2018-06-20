@@ -75,8 +75,6 @@ namespace Itsomax.Module.Core.Extensions
         {
             var supportedCultures = new[]
             {
-                new CultureInfo("es-ES"),
-                new CultureInfo("es"),
                 new CultureInfo("en-US"),
                 new CultureInfo("en"),
             };
