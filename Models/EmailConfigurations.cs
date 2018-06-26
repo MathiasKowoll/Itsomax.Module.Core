@@ -16,10 +16,10 @@ namespace Itsomax.Module.Core.Models
         [MaxLength(100)]
         public string User { get; set; }
         public byte[] Password { get; set; }
-        [MaxLength(100)]
+        [MaxLength(200)]
         public string Domain { get; set; }
-        [MaxLength(150)]
-        public string ApiKey { get; set; }
+        [MaxLength(200)]
+        public byte[] ApiKey { get; set; }
         public bool Default { get; set; }
     }
 }

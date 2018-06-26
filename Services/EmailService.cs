@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO.Enumeration;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mail;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using Itsomax.Module.Core.Interfaces;
@@ -41,15 +43,20 @@ namespace Itsomax.Module.Core.Services
         }
 
         public Task SmtpSendEmail(IEnumerable<string> email, string subject, string message, string smtpServer,
-            string emailSender,string user,string password, bool enableSsl,int port,string replyAddress)
+            string emailSender,string user,string password, bool enableSsl,int port,string replyAddress, IEnumerable<string> fileNames)
         {
-            var client = new SmtpClient(smtpServer);
-            client.UseDefaultCredentials = false;
-            client.Credentials =  new NetworkCredential(user,password);
-            client.EnableSsl = enableSsl;
-            client.Port = port;
-            
-            
+            //TODO: Implement atachments
+            //var contentType = new ContentType();
+            //contentType.MediaType = MediaTypeNames.Application.Octet;
+            //contentType.Name = fileName;
+            var client = new SmtpClient(smtpServer)
+            {
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(user, password),
+                EnableSsl = enableSsl,
+                Port = port
+            };
+
             var mail = new MailMessage()
             {
                 From = new MailAddress(emailSender),
@@ -69,6 +76,36 @@ namespace Itsomax.Module.Core.Services
             
             return Task.FromResult(0);
             
+        }
+
+        public Task SmtpSendEmailAnonymous(IEnumerable<string> email, string subject, string message, string smtpServer,
+            string emailSender, bool enableSsl, int port, string replyAddress, IEnumerable<string> fileNames)
+        {
+            var client = new SmtpClient(smtpServer)
+            {
+                UseDefaultCredentials = false,
+                EnableSsl = enableSsl,
+                Port = port
+            };
+
+            var mail = new MailMessage()
+            {
+                From = new MailAddress(emailSender),
+                IsBodyHtml = true,
+                Body = message,
+                Subject = subject
+            };
+            mail.ReplyToList.Add(replyAddress);
+            
+            foreach (var emailAddress in email)
+            {
+                mail.To.Add(emailAddress);
+            }
+
+            client.Send(mail);
+            mail.Dispose();
+            
+            return Task.FromResult(0);
         }
     }
     
