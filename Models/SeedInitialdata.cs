@@ -8,12 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace Itsomax.Module.Core.Models
 {
     public static class SeedInitialdata
     {
-        private static readonly string[] AppSettingsListBool = { "SeedData", "NewModule", "CreateAdmin", 
+        private static readonly string[] AppSettingsListBool = { "SystemSeedData", "SystemNewModule", "SystemCreateAdmin", 
             "RefreshClaims", "NewModuleCreateMenu" };
 
         private static readonly string[] AppSettingsListEmpty =
@@ -31,7 +32,7 @@ namespace Itsomax.Module.Core.Models
             }
         }
 
-        public static async Task CreateExtention(IServiceProvider serviceProvider)
+        public static async Task CreateExtention(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             using (var context = new ItsomaxDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<ItsomaxDbContext>>()))
@@ -76,6 +77,18 @@ namespace Itsomax.Module.Core.Models
                         }
                     }
                 }
+
+                var key = configuration.GetSection("EncryptKey:Key");
+                var setEncryptFunction = "create or replace function \"Core\".\"SetEncrypt\"(bytea) returns bytea as $$" +
+                                 "select encrypt($1,'"+key+"','aes');"+
+                                 "$$ LANGUAGE SQL STRICT IMMUTABLE ;";
+                var getEncryptFunction = "create or replace function \"Core\".\"GetEncrypt\"(bytea) returns text as $$" +
+                                         "select convert_from(decrypt($1,'"+key+"','aes'),'SQL_ASCII');" +
+                                         "$$ LANGUAGE SQL STRICT IMMUTABLE ;";
+                context.Database.ExecuteSqlCommand(setEncryptFunction);
+                context.Database.ExecuteSqlCommand(getEncryptFunction);
+                context.Database.CloseConnection();
+                
             }
         }
 
@@ -89,7 +102,7 @@ namespace Itsomax.Module.Core.Models
 
                 foreach (var appSettingsListBool in AppSettingsListBool)
                 {
-                    appSettingsAllSettings.Add(new AppSetting { Key = appSettingsListBool, Value = "true" });
+                    appSettingsAllSettings.Add(new AppSetting { SettingType = "System", Key = appSettingsListBool, Value = "true" });
                     if (context.AppSettings.Any(x => x.Key == appSettingsListBool)) continue;
                     appSettings.Add(new AppSetting { Key = appSettingsListBool, Value = "true" });
                 }
@@ -97,7 +110,7 @@ namespace Itsomax.Module.Core.Models
                 
                 foreach (var appSettingsListEmpty in AppSettingsListEmpty)
                 {
-                    appSettingsAllSettings.Add(new AppSetting { Key = appSettingsListEmpty, Value = "" });
+                    appSettingsAllSettings.Add(new AppSetting {SettingType = "System", Key = appSettingsListEmpty, Value = "" });
                     if (context.AppSettings.Any(x => x.Key == appSettingsListEmpty)) continue;
                     appSettings.Add(new AppSetting { Key = appSettingsListEmpty, Value = "" });
                 }

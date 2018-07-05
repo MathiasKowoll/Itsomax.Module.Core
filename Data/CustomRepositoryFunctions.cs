@@ -9,7 +9,7 @@ namespace Itsomax.Module.Core.Data
         
         public byte[] SetEncryption(string stringToEncrypt)
         {
-            byte[] setPass = null;
+            byte[] setEncrypt = null;
             var query = "select * from \"Core\".\"SetEncrypt\"('" + stringToEncrypt + "')";
             using (var command = Context.Database.GetDbConnection().CreateCommand())
             {
@@ -18,18 +18,18 @@ namespace Itsomax.Module.Core.Data
                 var result = command.ExecuteReader();
                 while (result.Read())
                 {
-                    setPass = (byte[])result[0];
+                    setEncrypt = (byte[])result[0];
                 }
                 Context.Database.CloseConnection();
             }
             
-            return setPass;
+            return setEncrypt;
         }
 
         public string GetDecryption(byte[] stringToDecrypt)
         {
-            string stringPassword = null;
-            var query = "select * from \"Core\".\"GetEcrypt\"('"+stringToDecrypt+"')";
+            string getEncrypt = null;
+            var query = "select * from \"Core\".\"GetEncrypt\"('"+stringToDecrypt+"')";
             using (var command = Context.Database.GetDbConnection().CreateCommand())
             {
                 command.CommandText = query;
@@ -37,12 +37,12 @@ namespace Itsomax.Module.Core.Data
                 var result = command.ExecuteReader();
                 while (result.Read())
                 {
-                    stringPassword = (string)result[0];
+                    getEncrypt = (string)result[0];
                 }
                 Context.Database.CloseConnection();
             }
 
-            return stringPassword;
+            return getEncrypt;
 
         }
     }
