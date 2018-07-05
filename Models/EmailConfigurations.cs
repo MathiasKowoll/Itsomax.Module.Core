@@ -18,8 +18,7 @@ namespace Itsomax.Module.Core.Models
         public byte[] Password { get; set; }
         [MaxLength(200)]
         public string Domain { get; set; }
-        [MaxLength(200)]
-        public byte[] ApiKey { get; set; }
+        public byte[] ApiVendorKey { get; set; }
         public bool Default { get; set; }
     }
 }
