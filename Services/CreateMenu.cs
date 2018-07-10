@@ -24,6 +24,11 @@ namespace Itsomax.Module.Core.Services
 
         public void CreteMenuFile()
         {
+            var appSettingsExists = _context.Set<AppSetting>().FirstOrDefault(x => x.Key == "SystemNewModuleCreateMenu" && x.Value =="true");
+            if (appSettingsExists == null)
+            {
+                return;
+            }
             var filePath = Path.Combine(GlobalConfiguration.ContentRootPath, "Views", "Shared");
             var file = "_AdminSideMenu.cshtml";
             var modules = _module.Query().Where(x => x.IsValidModule && x.ShortName.Contains("Management")).ToList();
@@ -47,7 +52,7 @@ namespace Itsomax.Module.Core.Services
                 count++;
             }
             _manageFile.EditFile(filePath, sidebarMenu, file);
-            var appSettings = _context.Set<AppSetting>().FirstOrDefault(x => x.Key == "NewModuleCreateMenu");
+            var appSettings = _context.Set<AppSetting>().FirstOrDefault(x => x.Key == "SystemNewModuleCreateMenu");
             if (appSettings != null) appSettings.Value = "false";
             _context.SaveChanges();
 

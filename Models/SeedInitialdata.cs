@@ -15,7 +15,7 @@ namespace Itsomax.Module.Core.Models
     public static class SeedInitialdata
     {
         private static readonly string[] AppSettingsListBool = { "SystemSeedData", "SystemNewModule", "SystemCreateAdmin", 
-            "RefreshClaims", "NewModuleCreateMenu" };
+            "SystemRefreshClaims", "SystemNewModuleCreateMenu" };
 
         private static readonly string[] AppSettingsListEmpty =
             {"SystemTitle", "SystemLoginText", "SystemLoginImageUrl", "SystemBigLogoUrl","SystemSmallLogoUrl"};
@@ -104,7 +104,7 @@ namespace Itsomax.Module.Core.Models
                 {
                     appSettingsAllSettings.Add(new AppSetting { SettingType = "System", Key = appSettingsListBool, Value = "true" });
                     if (context.AppSettings.Any(x => x.Key == appSettingsListBool)) continue;
-                    appSettings.Add(new AppSetting { Key = appSettingsListBool, Value = "true" });
+                    appSettings.Add(new AppSetting {SettingType = "System", Key = appSettingsListBool, Value = "true" });
                 }
                 
                 
@@ -112,7 +112,7 @@ namespace Itsomax.Module.Core.Models
                 {
                     appSettingsAllSettings.Add(new AppSetting {SettingType = "System", Key = appSettingsListEmpty, Value = "" });
                     if (context.AppSettings.Any(x => x.Key == appSettingsListEmpty)) continue;
-                    appSettings.Add(new AppSetting { Key = appSettingsListEmpty, Value = "" });
+                    appSettings.Add(new AppSetting {SettingType = "System", Key = appSettingsListEmpty, Value = "" });
                 }
                
                 var settings = context.AppSettings.ToList();
@@ -136,7 +136,7 @@ namespace Itsomax.Module.Core.Models
             using (var context = new ItsomaxDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<ItsomaxDbContext>>()))
             {
-                if(context.AppSettings.Any(x => x.Key == "NewModule" && x.Value == "false"))
+                if(context.AppSettings.Any(x => x.Key == "SystemNewModule" && x.Value == "false"))
                 {
                     return;
                 }
@@ -276,7 +276,7 @@ namespace Itsomax.Module.Core.Models
                     }
                 }
 
-                var newModule = context.AppSettings.FirstOrDefault(x => x.Key == "NewModule");
+                var newModule = context.AppSettings.FirstOrDefault(x => x.Key == "SystemNewModule");
                 if (newModule != null)
                 {
                     newModule.Value = "false";
@@ -284,7 +284,7 @@ namespace Itsomax.Module.Core.Models
                 }
 
                 context.SaveChanges();
-                var newMenu = context.AppSettings.FirstOrDefault(x => x.Key == "NewModuleCreateMenu");
+                var newMenu = context.AppSettings.FirstOrDefault(x => x.Key == "SystemNewModuleCreateMenu");
                 if (newMenu != null)
                 {
                     newMenu.Value = "true";
@@ -301,7 +301,7 @@ namespace Itsomax.Module.Core.Models
             using (var context = new ItsomaxDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<ItsomaxDbContext>>()))
             {
-                if(context.AppSettings.Any(x => x.Key == "CreateAdmin" && x.Value =="false"))
+                if(context.AppSettings.Any(x => x.Key == "SystemCreateAdmin" && x.Value =="false"))
                 {
                     return;
                 }
@@ -344,7 +344,7 @@ namespace Itsomax.Module.Core.Models
                 {
                     var passwordToken = userManager.GeneratePasswordResetTokenAsync(userExist).Result;
                     await userManager.ResetPasswordAsync(userExist, passwordToken, "Admin123.,");
-                    var createAdmin = context.AppSettings.FirstOrDefault(x => x.Key == "CreateAdmin");
+                    var createAdmin = context.AppSettings.FirstOrDefault(x => x.Key == "SystemCreateAdmin");
                     if (createAdmin != null)
                     {
                         createAdmin.Value = "false";
@@ -357,16 +357,5 @@ namespace Itsomax.Module.Core.Models
             }
 
         }
-        //TODO: create loading scripts for modules.
-        /*
-        public static void LoadInitialScript(IServiceProvider serviceProvider)
-        {
-            using (var context = new ItsomaxDbContext(
-                serviceProvider.GetRequiredService<DbContextOptions<ItsomaxDbContext>>()))
-            {
-                //context.Database
-            }
-        }
-        */
     }
 }
