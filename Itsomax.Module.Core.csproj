@@ -9,8 +9,8 @@
     <PackageLicenseUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core/blob/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</RepositoryUrl>
-    <Version>2.1.0-rc1</Version>
-    <PackageReleaseNotes>move to .net core 2.1 rc, minor fixes and change in services injection, update ntoast to 5.0.7</PackageReleaseNotes>
+    <Version>2.1.0</Version>
+    <PackageReleaseNotes>move to .net core 2.1, initial settings menu, bugfixes</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Update="Microsoft.NETCore.App" Version="2.1.0" />

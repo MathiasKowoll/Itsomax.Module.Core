@@ -152,26 +152,6 @@ namespace Itsomax.Module.Core.Extensions
 
             return services;
         }
- 
-        public static IServiceCollection AddCustomizedDataStore(this IServiceCollection services, IConfiguration configuration)
-        {
-			var configDb = configuration.GetSection("UseConnection:DefaultConnection").Value;
-            
-            if(configDb=="Postgres")
-			{
-				services.AddDbContext<ItsomaxDbContext>(options =>
-				options.UseNpgsql(configuration.GetConnectionString("Postgres"),              
-					b => b.MigrationsAssembly("Itsomax.AppHost")));
-			}
-            
-            if (configDb == "SqlServer"){
-				services.AddDbContext<ItsomaxDbContext>(options =>
-		        options.UseSqlServer(configuration.GetConnectionString("SqlServer"),
-				    b => b.MigrationsAssembly("Itsomax.AppHost")));
-				
-			}
-			return services;   
-        }
 
         public static IServiceProvider Build(this IServiceCollection services,
             IConfiguration configuration, IHostingEnvironment hostingEnvironment)

@@ -15,10 +15,10 @@ namespace Itsomax.Module.Core.Models
     public static class SeedInitialdata
     {
         private static readonly string[] AppSettingsListBool = { "SystemSeedData", "SystemNewModule", "SystemCreateAdmin", 
-            "SystemRefreshClaims", "SystemNewModuleCreateMenu" };
+            "SystemRefreshClaims", "SystemNewModuleCreateMenu"};
 
         private static readonly string[] AppSettingsListEmpty =
-            {"SystemTitle", "SystemLoginText", "SystemLoginImageUrl", "SystemBigLogoUrl","SystemSmallLogoUrl"};
+            {"SystemTitle", "SystemLoginText", "SystemLoginImageUrl", "SystemBigLogoUrl","SystemSmallLogoUrl", "SystemDefaultPage"};
 
         public static async Task CreateDb(IServiceProvider serviceProvider)
         {
