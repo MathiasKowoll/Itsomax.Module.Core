@@ -9,7 +9,6 @@ using Autofac.Extensions.DependencyInjection;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Itsomax.Data.Infrastructure;

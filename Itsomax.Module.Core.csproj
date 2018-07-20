@@ -24,7 +24,7 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
     <PackageReference Include="npgsql" Version="4.0.2" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.1.1" />
     <PackageReference Include="NPOI.Core.Extension" Version="1.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
