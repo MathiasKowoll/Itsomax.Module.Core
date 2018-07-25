@@ -3,9 +3,9 @@ using Hangfire;
 
 namespace Itsomax.Module.Core.Extensions
 {
-    public static class ApplicationBuilderHangfire
+    public static class ApplicationBuilderHangFire
     {
-        public static IApplicationBuilder UseCustomizedHangfire(this IApplicationBuilder app)
+        public static IApplicationBuilder UseCustomizedHangFire(this IApplicationBuilder app)
         {
             app.UseHangfireDashboard();
             app.UseHangfireServer();
