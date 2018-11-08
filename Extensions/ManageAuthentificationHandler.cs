@@ -30,7 +30,7 @@ namespace Itsomax.Module.Core.Extensions
 				var controller = path.Values["controller"].ToString();
 				var action = path.Values["action"].ToString();
 
-                if(action=="WelcomePage")
+                if(action=="WelcomePage" || action=="Index")
                 {
                     context.Succeed(requirement);
                     return Task.CompletedTask;
