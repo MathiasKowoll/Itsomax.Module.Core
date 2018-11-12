@@ -78,7 +78,7 @@ namespace Itsomax.Module.Core.Models
                     }
                 }
 
-                var key = configuration.GetSection("EncryptKey:Key");
+                var key = configuration.GetSection("EncryptKey:Key").Value;
                 var setEncryptFunction = "create or replace function \"Core\".\"SetEncrypt\"(bytea) returns bytea as $$" +
                                  "select encrypt($1,'"+key+"','aes');"+
                                  "$$ LANGUAGE SQL STRICT IMMUTABLE ;";
