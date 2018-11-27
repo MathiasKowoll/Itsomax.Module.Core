@@ -12,7 +12,6 @@ namespace Itsomax.Module.Core.Models
             //CreatedOn = DateTimeOffset.Now;
             UpdatedOn = DateTimeOffset.Now;
         }
-
         public bool IsDeleted { get; set; }
 
         public DateTimeOffset CreatedOn { get; set; }
