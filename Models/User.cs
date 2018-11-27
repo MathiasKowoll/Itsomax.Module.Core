@@ -19,5 +19,6 @@ namespace Itsomax.Module.Core.Models
 
         public DateTimeOffset UpdatedOn { get; }
         public IList<UserRole> Roles { get; set; } =  new List<UserRole>();
+        public IList<UserSetting> UserSetting { get; set; } = new List<UserSetting>(); 
     }
 }
