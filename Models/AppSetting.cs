@@ -1,3 +1,5 @@
+using Itsomax.Data.Infrastructure.Models;
+
 namespace Itsomax.Module.Core.Models
 {
     public class AppSetting
