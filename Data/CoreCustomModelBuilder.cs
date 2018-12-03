@@ -13,6 +13,15 @@ namespace Itsomax.Module.Core.Data
                 .ToTable("AppSetting", "Core")
                 .HasKey(x => new {x.Key});
 
+            modelBuilder.Entity<UserSettingDetail>(x =>
+            {
+                x.HasOne(b => b.UserAppSetting).WithMany(b => b.UserSettingDetail)
+                    .HasForeignKey(b => b.UserAppSettingId);
+                x.HasOne(b => b.User).WithMany(b => b.UserSettingDetail).HasForeignKey(b => b.UserId);
+                x.HasKey(b => new {b.UserId, b.UserAppSettingId});
+                x.ToTable("UserSettingDetail", "Core");
+            });
+            
             modelBuilder.Entity<AuditLogs>()
                 .ToTable("AuditLogs", "Core")
                 .HasKey(x => new {x.CreatedOn, x.ActionTrigered, x.UserName});
