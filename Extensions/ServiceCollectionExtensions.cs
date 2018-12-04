@@ -63,9 +63,9 @@ namespace Itsomax.Module.Core.Extensions
                     {
                         modules.Add(new ModuleInfo
                         {
-                            Name = moduleFolder.Name,
-                            Assembly = assembly,
-                            Path = moduleFolder.FullName
+                            Id = moduleFolder.Name,
+                            Assembly = assembly
+                            //Path = moduleFolder.FullName
                         });
                     }
                 }

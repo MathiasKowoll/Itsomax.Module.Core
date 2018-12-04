@@ -172,7 +172,7 @@ namespace Itsomax.Module.Core.Models
                     var moduleContents = modelContent as ModuleContent[] ?? modConfigs.ToArray();
                     if (modules != null)
                     {
-                        modules.Path = moduleConfig.Path;
+                        modules.Path = String.Empty;
                         context.Modules.Update(modules);
                         context.Entry(modules).State = EntityState.Modified;
                         context.SaveChanges();
@@ -220,9 +220,9 @@ namespace Itsomax.Module.Core.Models
                     {
                         modules = new Modules
                         {
-                            Name = moduleConfig.Name,
-                            ShortName = moduleConfig.ShortName,
-                            Path = moduleConfig.Path,
+                            Name = moduleConfig.Id,
+                            ShortName = moduleConfig.Name,
+                            Path = String.Empty,
                             IsValidModule = true
                         };
                         context.Modules.Add(modules);
