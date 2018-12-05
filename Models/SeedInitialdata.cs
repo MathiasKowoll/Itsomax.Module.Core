@@ -91,7 +91,7 @@ namespace Itsomax.Module.Core.Models
                 
             }
         }
-
+        /*
         public static void InitialAppSettings(IServiceProvider serviceProvider)
         {
             using (var context = new ItsomaxDbContext(
@@ -130,6 +130,7 @@ namespace Itsomax.Module.Core.Models
                 context.SaveChanges();
             }
         }
+        */
 
         public static void InitializeModules(IServiceProvider serviceProvider)
         {

@@ -75,6 +75,8 @@ namespace Itsomax.Module.Core.Data
             {
                 o.HasOne(x => x.Modules).WithMany(x => x.SubModules).HasForeignKey(x => x.ModulesId);
             });
+            
+            CoreSeedData.SeedData(modelBuilder);
         }
     }
 }
