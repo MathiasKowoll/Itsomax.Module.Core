@@ -222,7 +222,7 @@ namespace Itsomax.Module.Core.Models
                         {
                             Name = moduleConfig.Id,
                             ShortName = moduleConfig.Name,
-                            Path = String.Empty,
+                            Path = String.Empty    ,
                             IsValidModule = true
                         };
                         context.Modules.Add(modules);
