@@ -24,12 +24,10 @@ namespace Itsomax.Module.Core.Extensions
             var route = config.GetSection("DefaultUrl:Url").Value;
             app.UseMvc(routes =>
 			{
-				routes.Routes.Add(new UrlSlugRoute(routes.DefaultHandler));
-
 				routes.MapRoute(
 					"default",
                     route);
-                    //"{controller=Admin}/{action=Index}/{id?}");
+                    
 			});
             return app;
         }

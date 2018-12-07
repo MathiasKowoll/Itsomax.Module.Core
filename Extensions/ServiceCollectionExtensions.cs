@@ -103,7 +103,7 @@ namespace Itsomax.Module.Core.Extensions
                 })
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddNToastNotifyToastr()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
 
