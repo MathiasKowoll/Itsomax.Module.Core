@@ -10,7 +10,7 @@ namespace Itsomax.Module.Core.Models
             Id = id;
         }
         public string Key { get; set; }
-        public string Value { get; set; }
+        
         public IList<UserSettingDetail> UserSettingDetail { get; set; } = new List<UserSettingDetail>();
         
     }

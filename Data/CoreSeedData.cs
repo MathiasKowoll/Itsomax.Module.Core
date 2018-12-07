@@ -8,7 +8,7 @@ namespace Itsomax.Module.Core.Data
         public static void SeedData(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserAppSetting>().HasData(
-                new UserAppSetting(1) {Key = "SystemDefaultPage", Value = "/Admin/Welcome"}
+                new UserAppSetting(1) {Key = "SystemDefaultPage"}
             );
 
             modelBuilder.Entity<AppSetting>().HasData(
