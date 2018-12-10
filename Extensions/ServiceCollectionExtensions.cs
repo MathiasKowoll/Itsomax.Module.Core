@@ -4,25 +4,24 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using MediatR;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.CodeAnalysis;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Itsomax.Data.Infrastructure;
 using Itsomax.Data.Infrastructure.Data;
+using Itsomax.Data.Infrastructure.Web.ModelBinders;
 using Itsomax.Module.Core.Data;
 using Itsomax.Module.Core.Models;
-using Itsomax.Data.Infrastructure.Web.ModelBinders;
-using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-
 
 namespace Itsomax.Module.Core.Extensions
 {
