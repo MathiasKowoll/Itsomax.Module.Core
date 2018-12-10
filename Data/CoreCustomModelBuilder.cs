@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Itsomax.Data.Infrastructure.Data;
 using Itsomax.Module.Core.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Itsomax.Module.Core.Data
 {

@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
-using Itsomax.Data.Infrastructure;
+﻿using Itsomax.Data.Infrastructure;
 using Itsomax.Module.Core.Data;
-using Microsoft.AspNetCore.Identity;
 using Itsomax.Module.Core.Extensions;
 using Itsomax.Module.Core.Interfaces;
 using Itsomax.Module.Core.Models;
 using Itsomax.Module.Core.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Itsomax.Module.Core
 {

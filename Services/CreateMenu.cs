@@ -1,11 +1,11 @@
+using System;
+using System.IO;
+using System.Linq;
 using Itsomax.Data.Infrastructure;
 using Itsomax.Data.Infrastructure.Data;
-using Itsomax.Module.Core.Models;
-using System.IO;
-using Itsomax.Module.Core.Interfaces;
-using System.Linq;
-using System;
 using Itsomax.Module.Core.Data;
+using Itsomax.Module.Core.Interfaces;
+using Itsomax.Module.Core.Models;
 
 namespace Itsomax.Module.Core.Services
 {

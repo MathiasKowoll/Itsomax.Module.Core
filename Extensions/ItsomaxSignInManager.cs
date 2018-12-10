@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
+using Itsomax.Module.Core.Events;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Itsomax.Module.Core.Events;
-using Microsoft.AspNetCore.Authentication;
 
 namespace Itsomax.Module.Core.Extensions
 {

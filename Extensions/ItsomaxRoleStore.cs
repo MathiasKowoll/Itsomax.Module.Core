@@ -1,8 +1,9 @@
 //using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 using Itsomax.Module.Core.Data;
 using Itsomax.Module.Core.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Itsomax.Module.Core.Extensions
 {

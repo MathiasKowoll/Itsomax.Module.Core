@@ -1,7 +1,7 @@
-using Microsoft.Extensions.DependencyInjection;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Itsomax.Module.Core.Extensions
 {

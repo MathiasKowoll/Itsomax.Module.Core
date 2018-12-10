@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Itsomax.Data.Infrastructure.Models;
+
 namespace Itsomax.Module.Core.Models
 {
     public class SubModule : EntityBase

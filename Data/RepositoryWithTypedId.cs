@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using Itsomax.Data.Infrastructure.Data;
 using Itsomax.Data.Infrastructure.Models;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Itsomax.Module.Core.Data
 {

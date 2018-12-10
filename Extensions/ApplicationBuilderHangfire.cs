@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Builder;
 using Hangfire;
+using Microsoft.AspNetCore.Builder;
 
 namespace Itsomax.Module.Core.Extensions
 {

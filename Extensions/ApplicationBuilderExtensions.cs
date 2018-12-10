@@ -1,12 +1,11 @@
 using System;
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.Net.Http.Headers;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Hosting;
-
+using Microsoft.Net.Http.Headers;
 
 namespace Itsomax.Module.Core.Extensions
 {

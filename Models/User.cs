@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 using Itsomax.Data.Infrastructure.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Itsomax.Module.Core.Models
 {

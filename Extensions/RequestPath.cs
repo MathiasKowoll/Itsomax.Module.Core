@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+
 namespace Itsomax.Module.Core.Extensions
 {
 	public class RequestPath

@@ -1,14 +1,12 @@
-﻿using Itsomax.Data.Infrastructure;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using Itsomax.Data.Infrastructure;
 using Itsomax.Module.Core.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 
 namespace Itsomax.Module.Core.Models
 {

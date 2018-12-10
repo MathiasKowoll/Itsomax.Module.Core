@@ -21,27 +21,38 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Newtonsoft.Json;
 
 
 namespace Itsomax.Module.Core.Extensions
 {
+    
     public static class ServiceCollectionExtensions
     {
+        private static readonly IModuleConfigurationManager modulesConfig = new ModuleConfigurationManager();
         public static IServiceCollection LoadInstalledModules(this IServiceCollection services, string contentRootPath)
         {
             var modules = new List<ModuleInfo>();
-            var moduleRootFolder = new DirectoryInfo(Path.Combine(contentRootPath, "Modules"));
-            var moduleFolders = moduleRootFolder.GetDirectories();
+            var modulesFolder = Path.Combine(contentRootPath, "Modules");
+            const string moduleManifestName = "module.json";
+            //var moduleFolders = moduleRootFolder.GetDirectories();
 
-            foreach (var moduleFolder in moduleFolders)
-            {
-                var binFolder = new DirectoryInfo(Path.Combine(moduleFolder.FullName, "bin"));
-                if (!binFolder.Exists)
+            foreach (var module in modulesConfig.GetModules())
+            {   
+                var moduleFolder = new DirectoryInfo(Path.Combine(modulesFolder, module.Id));
+                var moduleManifestPath = Path.Combine(moduleFolder.FullName, moduleManifestName);
+                
+                if (!File.Exists(moduleManifestPath))
+                {
+                    throw new MissingModuleManifestException($"The manifest for the module '{moduleFolder.Name}' is not found.", moduleFolder.Name);
+                }
+                
+                if (!moduleFolder.Exists)
                 {
                     continue;
                 }
 
-                foreach (var file in binFolder.GetFileSystemInfos("*.dll", SearchOption.AllDirectories))
+                foreach (var file in moduleFolder.GetFileSystemInfos("*.dll", SearchOption.AllDirectories))
                 {
                     Assembly assembly;
                     try
@@ -58,13 +69,23 @@ namespace Itsomax.Module.Core.Extensions
                             throw;
                         }
                     }
-
-                    if (assembly.FullName.Contains(moduleFolder.Name))
+                    
+                    using (var reader = new StreamReader(moduleManifestPath))
+                    {
+                        string content = reader.ReadToEnd();
+                        dynamic moduleMetadata = JsonConvert.DeserializeObject(content);
+                        module.Name = moduleMetadata.name;
+                        module.IsBundledWithHost = moduleMetadata.isBundledWithHost;
+                    }
+                    
+                    if (assembly.FullName.Contains(module.Id))
                     {
                         modules.Add(new ModuleInfo
                         {
-                            Id = moduleFolder.Name,
-                            Assembly = assembly
+                            Id = module.Id,
+                            Name = module.Name,
+                            Assembly = assembly,
+                            IsBundledWithHost = module.IsBundledWithHost
                             //Path = moduleFolder.FullName
                         });
                     }
@@ -72,7 +93,6 @@ namespace Itsomax.Module.Core.Extensions
             }
 
             foreach (var module in modules)
-
             {
                 var moduleInitializerType = module.Assembly.GetTypes()
                     .FirstOrDefault(x => typeof(IModuleInitializer).IsAssignableFrom(x));
