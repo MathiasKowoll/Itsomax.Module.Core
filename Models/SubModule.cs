@@ -7,6 +7,7 @@ namespace Itsomax.Module.Core.Models
     {
         public string Name { get; set; }
         public long ModulesId { get; set; }
+        public bool ActiveSubModule { get; set; }
         public Modules Modules { get; set; }
         public IList<ModuleRole> ModuleRoles { get; set; } = new List<ModuleRole>();
         

@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Itsomax.Data.Infrastructure;
 using Itsomax.Module.Core.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using NPOI.SS.Formula.Functions;
 
 namespace Itsomax.Module.Core.Models
 {
@@ -23,30 +27,117 @@ namespace Itsomax.Module.Core.Models
                 }
             }
         }
-        
+
         public static void InitializeModules(IServiceProvider serviceProvider)
         {
             using (var context = new ItsomaxDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<ItsomaxDbContext>>()))
             {
-                if(context.AppSettings.Any(x => x.Key == "SystemNewModule" && x.Value == "false"))
+                //Check Existance of modules, deactivate if does not exist on host.
+                foreach (var item in context.Modules.ToList())
                 {
-                    return;
-                }
-
-                var modulesDb = context.Modules.ToList();
-                foreach (var item in modulesDb)
-                {
-
-                    var existModuleGlobal = GlobalConfiguration.Modules.FirstOrDefault(x => x.Name == item.Name);
+                    var existModuleGlobal = GlobalConfiguration.Modules.FirstOrDefault(x => x.Id == item.Name);
                     if (existModuleGlobal != null) continue;
                     {
                         var moduleDelete = context.Modules.FirstOrDefault(x => x.Id == item.Id);
-                        if (moduleDelete != null) context.Modules.Remove(moduleDelete);
+                        if (moduleDelete == null) continue;
+                        moduleDelete.IsValidModule = false;
+                        context.Modules.Update(moduleDelete);
+                        context.Entry(moduleDelete).State = EntityState.Modified;
                         context.SaveChanges();
                     }
                 }
 
+                // Add new Modules and update existent modules
+                foreach (var hostModule in GlobalConfiguration.Modules)
+                {
+                    var existModuleDb = context.Modules.FirstOrDefault(x => x.Name == hostModule.Id);
+                    if (existModuleDb == null)
+                    {
+                        var module = new Modules
+                        {
+                            Name = hostModule.Id,
+                            IsValidModule = true,
+                            Path = String.Empty,
+                            ShortName = hostModule.Name
+                        };
+                        context.Modules.Add(module);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        existModuleDb.ShortName = hostModule.Name;
+                        context.Modules.Update(existModuleDb);
+                        context.Entry(existModuleDb).State = EntityState.Modified;
+                        context.SaveChanges();
+                    }
+                }
+
+                //Create Submodules
+                IList<ModuleContentViewModel> moduleContent = new List<ModuleContentViewModel>();
+                foreach (var moduleConfig in GlobalConfiguration.Modules)
+                {
+                    var moduleId = context.Modules.FirstOrDefault(x => x.Name == moduleConfig.Id).Id;
+                    var asm = moduleConfig.Assembly;
+                    var modelContent = asm.GetTypes().SelectMany(t =>
+                            t.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public))
+                        .Where(d => d.ReturnType.Name.Contains("Result"))
+                        .Select(n => new ModuleContentViewModel
+                        {
+                            Controller = n.DeclaringType?.Name.Replace("Controller", ""),
+                            ModulesId = moduleId
+                        });
+                    foreach (var item in modelContent)
+                    {
+                        moduleContent.Add(item);
+                    }
+
+                }
+
+                //get only controllers by module.
+                var subModuleName = moduleContent.Where(x => x.Controller.Contains("Manage"))
+                    .Select(x => new {x.ModulesId, x.Controller}).Distinct().ToList();
+
+                foreach (var subModule in context.SubModule.ToList())
+                {
+                    var subModuleExist = subModuleName.FirstOrDefault(x =>
+                        x.ModulesId == subModule.ModulesId && x.Controller == subModule.Name);
+                    if (subModuleExist != null) continue;
+                    {
+                        subModule.ActiveSubModule = true;
+                        context.SubModule.Update(subModule);
+                        context.Entry(subModule).State = EntityState.Modified;
+                        context.SaveChanges();
+                    }
+
+                }
+
+                foreach (var hostSubModule in subModuleName)
+                {
+                    var subModuleDb = context.SubModule.FirstOrDefault(x =>
+                        x.ModulesId == hostSubModule.ModulesId && x.Name == hostSubModule.Controller);
+                    if (subModuleDb != null)
+                    {
+                        subModuleDb.ActiveSubModule = true;
+                        context.SubModule.Update(subModuleDb);
+                        context.Entry(subModuleDb).State = EntityState.Modified;
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var newSubModule = new SubModule
+                        {
+                            Name = hostSubModule.Controller,
+                            ModulesId = hostSubModule.ModulesId,
+                            ActiveSubModule = true
+                        };
+                        context.SubModule.Add(newSubModule);
+                        context.SaveChanges();
+                    }
+                }
+
+
+                /*
                 foreach (var moduleConfig in GlobalConfiguration.Modules)
                 {
                     var asm = moduleConfig.Assembly;
@@ -186,6 +277,8 @@ namespace Itsomax.Module.Core.Models
 
                 context.SaveChanges();
 
+            }
+            */
             }
         }
 

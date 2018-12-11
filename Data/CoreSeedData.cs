@@ -13,7 +13,6 @@ namespace Itsomax.Module.Core.Data
 
             modelBuilder.Entity<AppSetting>().HasData(
                 new AppSetting() {Key = "SystemSeedData", Value = "true"},
-                new AppSetting() {Key = "SystemNewModule", Value = "true"},
                 new AppSetting() {Key = "SystemCreateAdmin", Value = "true"},
                 new AppSetting() {Key = "SystemRefreshClaims", Value = "true"},
                 new AppSetting() {Key = "SystemNewModuleCreateMenu", Value = "true"},

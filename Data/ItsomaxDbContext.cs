@@ -20,7 +20,6 @@ namespace Itsomax.Module.Core.Data
         }
         
         public DbSet<Modules> Modules { get; set; }
-		public DbSet<ModuleContent> ModuleContent { get; set; }
         public DbSet<SubModule> SubModule { get; set; }
         public DbSet<AppSetting> AppSettings { get; set; }
         
