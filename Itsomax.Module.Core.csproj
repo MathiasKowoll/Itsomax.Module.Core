@@ -5,15 +5,14 @@
     <Authors>Mathias Kowoll</Authors>
     <Company>IT-SOMAX</Company>
     <Description>Core module to build apps with Itsomax.AppHost</Description>
-    <Copyright>Mathias Kowoll, IT-SOMAX @2018</Copyright>
-    <PackageLicenseUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core/blob/master/LICENSE.md</PackageLicenseUrl>
+    <Copyright>Mathias Kowoll, IT-SOMAX @2019</Copyright>
     <PackageProjectUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MathiasKowoll/Itsomax.Module.Core</RepositoryUrl>
     <Version>2.1.0</Version>
     <PackageReleaseNotes>move to .net core 2.1, initial settings menu, bugfixes</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Hangfire" Version="1.7.0-beta1" />
+    <PackageReference Include="Hangfire" Version="1.7.0-beta2" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
@@ -21,7 +20,7 @@
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
     <PackageReference Include="NPOI.Core.Extension" Version="1.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />

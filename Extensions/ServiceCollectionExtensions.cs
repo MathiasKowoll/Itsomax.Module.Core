@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
@@ -130,8 +131,33 @@ namespace Itsomax.Module.Core.Extensions
             {
                 mvcBuilder.AddApplicationPart(module.Assembly);
             }
+            /*
+            foreach (var module in modules.Where(x => !x.IsBundledWithHost))
+            {
+                AddApplicationPart(mvcBuilder, module.Assembly);
+            }
+            */
 
             return services;
+        }
+        
+        private static void AddApplicationPart(IMvcBuilder mvcBuilder, Assembly assembly)
+        {
+            var partFactory = ApplicationPartFactory.GetApplicationPartFactory(assembly);
+            foreach (var part in partFactory.GetApplicationParts(assembly))
+            {
+                mvcBuilder.PartManager.ApplicationParts.Add(part);
+            }
+
+            var relatedAssemblies = RelatedAssemblyAttribute.GetRelatedAssemblies(assembly, throwOnError: false);
+            foreach (var relatedAssembly in relatedAssemblies)
+            {
+                partFactory = ApplicationPartFactory.GetApplicationPartFactory(relatedAssembly);
+                foreach (var part in partFactory.GetApplicationParts(relatedAssembly))
+                {
+                    mvcBuilder.PartManager.ApplicationParts.Add(part);
+                }
+            }
         }
 
         public static IServiceCollection AddCustomizedIdentity(this IServiceCollection services, 
@@ -180,18 +206,7 @@ namespace Itsomax.Module.Core.Extensions
 
             builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly).AsImplementedInterfaces();
             builder.RegisterType<SequentialMediator>().As<IMediator>();
-            builder.Register<SingleInstanceFactory>(ctx =>
-            {
-                var c = ctx.Resolve<IComponentContext>();
-                return t => c.Resolve(t);
-            });
-
-            builder.Register<MultiInstanceFactory>(ctx =>
-            {
-                var c = ctx.Resolve<IComponentContext>();
-                return t => (IEnumerable<object>)c.Resolve(typeof(IEnumerable<>).MakeGenericType(t));
-            });
-
+            
             foreach (var module in GlobalConfiguration.Modules)
             {
                 builder.RegisterAssemblyTypes(module.Assembly).Where(t => t.Name.EndsWith("Repository")).AsImplementedInterfaces();
