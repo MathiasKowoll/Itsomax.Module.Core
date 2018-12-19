@@ -7,8 +7,11 @@ namespace Itsomax.Module.Core.Extensions
     {
         public static IApplicationBuilder UseCustomizedHangFire(this IApplicationBuilder app)
         {
-            app.UseHangfireDashboard();
             app.UseHangfireServer();
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[] { new HangfireAuthorizationFilter() },
+            });
             return app;
         }
     }

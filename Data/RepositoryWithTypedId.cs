@@ -76,6 +76,15 @@ namespace Itsomax.Module.Core.Data
         {
             return Context.SaveChangesAsync();
         }
+
+        public IQueryable<T> ExecuteFunctionResults(string sql)
+        {
+            return Context.Set<T>().FromSql(sql);
+        }
         
+        public T ExecuteFunction(string sql)
+        {
+            return Context.Set<T>().FromSql(sql).FirstOrDefault();
+        }
     }
 }
