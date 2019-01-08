@@ -37,13 +37,22 @@ namespace Itsomax.Module.Core.Models
                 foreach (var item in context.Modules.ToList())
                 {
                     var existModuleGlobal = GlobalConfiguration.Modules.FirstOrDefault(x => x.Id == item.Name);
-                    if (existModuleGlobal != null) continue;
+                    if (existModuleGlobal == null)
                     {
                         var moduleDelete = context.Modules.FirstOrDefault(x => x.Id == item.Id);
                         if (moduleDelete == null) continue;
                         moduleDelete.IsValidModule = false;
                         context.Modules.Update(moduleDelete);
                         context.Entry(moduleDelete).State = EntityState.Modified;
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var moduleActive = context.Modules.FirstOrDefault(x => x.Id == item.Id);
+                        if(moduleActive == null) continue;
+                        moduleActive.IsValidModule = true;
+                        context.Modules.Update(moduleActive);
+                        context.Entry(moduleActive).State = EntityState.Modified;
                         context.SaveChanges();
                     }
                 }
@@ -67,6 +76,7 @@ namespace Itsomax.Module.Core.Models
                     else
                     {
                         existModuleDb.ShortName = hostModule.Name;
+                        existModuleDb.IsValidModule = true;
                         context.Modules.Update(existModuleDb);
                         context.Entry(existModuleDb).State = EntityState.Modified;
                         context.SaveChanges();
@@ -102,9 +112,16 @@ namespace Itsomax.Module.Core.Models
                 {
                     var subModuleExist = subModuleName.FirstOrDefault(x =>
                         x.ModulesId == subModule.ModulesId && x.Controller == subModule.Name);
-                    if (subModuleExist != null) continue;
+                    if (subModuleExist != null)
                     {
                         subModule.ActiveSubModule = true;
+                        context.SubModule.Update(subModule);
+                        context.Entry(subModule).State = EntityState.Modified;
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        subModule.ActiveSubModule = false;
                         context.SubModule.Update(subModule);
                         context.Entry(subModule).State = EntityState.Modified;
                         context.SaveChanges();

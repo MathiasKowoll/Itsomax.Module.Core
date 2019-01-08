@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Itsomax.Data.Infrastructure.Data;
 using Itsomax.Data.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Itsomax.Module.Core.Data
 {
@@ -56,12 +57,21 @@ namespace Itsomax.Module.Core.Data
             Context.Set<T>().RemoveRange(entities);
         }
 
-        /*
+        public void Update(T entity)
+        {
+            Context.Set<T>().Update(entity);
+        }
+
+        public void UpdateRange(IEnumerable<T> entities)
+        {
+            Context.Set<T>().UpdateRange(entities);
+        }
+
         public IDbContextTransaction BeginTransaction()
         {
             return Context.Database.BeginTransaction();
         }
-        */
+                
         public IQueryable<T> Query()
         {
             return DbSet;
