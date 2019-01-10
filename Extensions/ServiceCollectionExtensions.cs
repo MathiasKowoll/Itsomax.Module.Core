@@ -29,7 +29,7 @@ namespace Itsomax.Module.Core.Extensions
     
     public static class ServiceCollectionExtensions
     {
-        private static readonly IModuleConfigurationManager modulesConfig = new ModuleConfigurationManager();
+        private static readonly IModuleConfigurationManager ModulesConfig = new ModuleConfigurationManager();
         public static IServiceCollection LoadInstalledModules(this IServiceCollection services, string contentRootPath)
         {
             var modules = new List<ModuleInfo>();
@@ -37,7 +37,7 @@ namespace Itsomax.Module.Core.Extensions
             const string moduleManifestName = "module.json";
             //var moduleFolders = moduleRootFolder.GetDirectories();
 
-            foreach (var module in modulesConfig.GetModules())
+            foreach (var module in ModulesConfig.GetModules())
             {   
                 var moduleFolder = new DirectoryInfo(Path.Combine(modulesFolder, module.Id));
                 var moduleManifestPath = Path.Combine(moduleFolder.FullName, moduleManifestName);
@@ -46,6 +46,15 @@ namespace Itsomax.Module.Core.Extensions
                 {
                     throw new MissingModuleManifestException($"The manifest for the module '{moduleFolder.Name}' is not found.", moduleFolder.Name);
                 }
+                
+                using (var reader = new StreamReader(moduleManifestPath))
+                {
+                    var content = reader.ReadToEnd();
+                    dynamic moduleMetadata = JsonConvert.DeserializeObject(content);
+                    module.Name = moduleMetadata.name;
+                    module.IsBundledWithHost = moduleMetadata.isBundledWithHost;
+                }
+
                 
                 if (!moduleFolder.Exists)
                 {
@@ -70,13 +79,6 @@ namespace Itsomax.Module.Core.Extensions
                         }
                     }
                     
-                    using (var reader = new StreamReader(moduleManifestPath))
-                    {
-                        string content = reader.ReadToEnd();
-                        dynamic moduleMetadata = JsonConvert.DeserializeObject(content);
-                        module.Name = moduleMetadata.name;
-                        module.IsBundledWithHost = moduleMetadata.isBundledWithHost;
-                    }
                     
                     if (assembly.FullName.Contains(module.Id))
                     {
@@ -113,14 +115,6 @@ namespace Itsomax.Module.Core.Extensions
                 {
                     o.ModelBinderProviders.Insert(0, new InvariantDecimalModelBinderProvider());
                 })
-                .AddRazorOptions(o =>
-                {
-                    foreach (var module in modules)
-                    {
-                        o.AdditionalCompilationReferences.Add(
-                            MetadataReference.CreateFromFile(module.Assembly.Location));
-                    }
-                })
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
@@ -129,33 +123,27 @@ namespace Itsomax.Module.Core.Extensions
 
             foreach (var module in modules)
             {
-                mvcBuilder.AddApplicationPart(module.Assembly);
+                AddApplicationPart(mvcBuilder.PartManager,module.Assembly);
             }
-            /*
-            foreach (var module in modules.Where(x => !x.IsBundledWithHost))
-            {
-                AddApplicationPart(mvcBuilder, module.Assembly);
-            }
-            */
 
             return services;
         }
         
-        private static void AddApplicationPart(IMvcBuilder mvcBuilder, Assembly assembly)
+        private static void AddApplicationPart(ApplicationPartManager applicationPartManager, Assembly assembly)
         {
             var partFactory = ApplicationPartFactory.GetApplicationPartFactory(assembly);
             foreach (var part in partFactory.GetApplicationParts(assembly))
             {
-                mvcBuilder.PartManager.ApplicationParts.Add(part);
+                applicationPartManager.ApplicationParts.Add(part);
             }
 
-            var relatedAssemblies = RelatedAssemblyAttribute.GetRelatedAssemblies(assembly, throwOnError: false);
+            var relatedAssemblies = RelatedAssemblyAttribute.GetRelatedAssemblies(assembly, false);
             foreach (var relatedAssembly in relatedAssemblies)
             {
                 partFactory = ApplicationPartFactory.GetApplicationPartFactory(relatedAssembly);
                 foreach (var part in partFactory.GetApplicationParts(relatedAssembly))
                 {
-                    mvcBuilder.PartManager.ApplicationParts.Add(part);
+                    applicationPartManager.ApplicationParts.Add(part);
                 }
             }
         }
